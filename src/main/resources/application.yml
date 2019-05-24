@@ -1,0 +1,23 @@
+server:
+  port: 8282
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/<your-database-name>?createDatabaseIfNotExist=true
+    username: <database-username>
+    password: <database-userpassword>
+    driver-class-name: org.postgresql.Driver
+    initialization-mode: always
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+logging:
+  level:
+    org:
+      hibernate:
+        type: trace
+
