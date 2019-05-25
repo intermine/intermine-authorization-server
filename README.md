@@ -60,12 +60,14 @@ Server will be up on default port 8282 but you can change it by make changes in 
 |--------------|----------------|----------------------------------------------------|-------------|
 | flymine      | fmine          | authorization_code,password,refresh_token,implicit | READ, WRITE |   
 
+
+
 ## Testing the App
 
-* Testing password Grant type to get access_token:
-This is for testing purpose only and this grant type will not be present in live application of Intermine authorization server.
+1. Testing PASSWORD Grant type to get access_token.
+This grant type is for testing purpose only and will not present in live application of Intermine authorization server.
 
-Make a post request into your rest client or by curl with following parameters
+Make a post request from your rest client or by curl with following parameters:
 ```
 url: http://localhost:8282/oauth/token
 Authorization: Basic Auth
@@ -75,6 +77,7 @@ Body(form-data):: grant_type : password
                   username   : admin
                   password   : admin123
 ```
+
 
 Response:
 ```
@@ -86,14 +89,15 @@ Response:
     "scope": "READ WRITE"
 }
 ```
-In the above grant type client is asking from access token from authorization server with its own credentials on behalf of user i.e along with user credentials also.
+In the above grant type client is asking for access token from authorization server with its own credentials on behalf of user i.e along with user credentials also.
 
 
-* Testing the authorization_code grant type:
+2. Testing the authorization_code grant type:
+
 For this grant type we need a client and a resource but this is our auth server only so we can test this grant type by using any rest client like postman.
 
-Choose Authorization as OAuth2.0 in your rest client and request a new access token.
-fill these necessary details in request:
+Choose Authorization as OAuth2.0 in your rest client and request a new access token with the following parameters.
+
 ```
 Token Name: <your token name>
 Grant Type: Authorization Code
@@ -108,6 +112,7 @@ Client Authentication: Send as Basic Auth Header
 ```
 
 Response
+
 you will be redirected to a login screen page so make sure to enter correct credentials of admin or testUser.
 After that approve the scope that client want to access.
 Finally you will get you token!!!!
@@ -125,7 +130,7 @@ In above grant type our rest client is handling resource server part and our cli
 
 
 
-* Testing validation of access token:
+3. Testing validation of access token:
 In real application only resource server can validate this token but for here we can test by following request:
 Make a Get request with following paramters
 ```
