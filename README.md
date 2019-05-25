@@ -123,6 +123,10 @@ Client Authentication: Send as Basic Auth Header
 
 Response
 
+<p align="center">
+  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/login.png" alt="Intermine Login" width="738">
+</p>
+
 you will be redirected to a login screen page so make sure to enter correct credentials of admin or testUser.
 After that approve the scope that client want to access.
 Finally you will get you token!!!!
