@@ -1,6 +1,6 @@
 # Intermine Authenticaion Server
 <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/logo.png" align="right"
-     title="Intermine Logo" width="120" height="178">
+     title="Intermine Logo" width="180" height="150">
 This is an Intermine Authorization Server built with Spring Boot 2.x OAuth2 which allows to access all 30 mines instance using a single account.
 
 
