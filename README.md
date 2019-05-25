@@ -4,10 +4,10 @@ This is an Intermine Authorization Server built with Spring Boot 2.x OAuth2 whic
 
 ## Features
 
-OAuth2.0 Authorization Server
-We Use Postgresql
-We Use Jdbc Token Store
-We Use Jpa
+* OAuth2.0 Authorization Server
+* We Use Postgresql
+* We Use Jdbc Token Store
+* We Use Jpa
 
 ## Getting Started
 
@@ -15,7 +15,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+What things you need to install the software and how to install them:
 
 * [Postgresql](https://www.postgresql.org/download/linux/ubuntu/) - Database
 * [Postman](https://www.getpostman.com/downloads/) - Rest Client (OPTIONAL)
@@ -23,27 +23,29 @@ What things you need to install the software and how to install them
 
 ## Installing
 
-A step by step series of examples that tell you how to get a development env running
+A step by step series of examples that tell you how to get a development env running.
 
-###STEP-1 Database Configuration
+### STEP-1 Database Configuration
 
-create your own database in postgresql
+Create your own database in postgresql.
 
 ```
 CREATE DATABASE <your database name> ;
 ```
-create a user and grant access to that user
+Create a user and grant access to that user.
 
 ```
 CREATE USER <your user> WITH ENCRYPTED PASSWORD <'yourpass'>;
 GRANT ALL PRIVILEGES ON DATABASE <your dbname> TO <your user>;
 ```
+
 Update these configurations in application.yml file of project inside resource directory.
+
 
 NOTE: Resource directory contains two predefined script also for database table creation and dummy entries so no need to create any tables on your own.
 But if you are running system very first time then make sure the extension of data file in resource directory is .sql because it will create entries in the tables with primary keys so after first run either remove that file or rename it to data.txt otherwise it'll cause error in your furthur run.  
 
-###STEP-2 Run the application
+### STEP-2 Run the application
 
 Server will be up on default port 8282 but you can change it by make changes in application.yml file.   
 
@@ -53,12 +55,12 @@ Server will be up on default port 8282 but you can change it by make changes in 
 | admin           | admin123        | Admin     | Create,Read,Update & DeleteProfile    |
 | testUser        | testUser123     | Operator  | Read & Update Profile                 |
 
-###Oauth Client Credential
+### Oauth Client Credential
 | Client_id    | Client_secret  | authorized grant types                             | scope       |
 |--------------|----------------|----------------------------------------------------|-------------|
 | flymine      | fmine          | authorization_code,password,refresh_token,implicit | READ, WRITE |   
 
-##Testing the App
+## Testing the App
 
 * Testing password Grant type to get access_token:
 This is for testing purpose only and this grant type will not be present in live application of Intermine authorization server.
@@ -202,4 +204,3 @@ This project is licensed under the GNU Lesser General Public License - see the [
 * Hat tip to anyone whose code was used
 * Inspiration
 * etc
-
