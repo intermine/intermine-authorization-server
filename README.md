@@ -12,7 +12,7 @@ This is an Intermine Authorization Server built with Spring Boot 2.x OAuth2 whic
 
 
 
-## Features
+### Features
 
 * OAuth2.0 Authorization Server
 * We Use Postgresql
