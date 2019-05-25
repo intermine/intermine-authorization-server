@@ -124,12 +124,14 @@ Client Authentication: Send as Basic Auth Header
 Response
 
 You will be redirected to a login screen page so make sure to enter correct credentials of admin or testUser.
+
 <p align="center">
   <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/login.png" alt="Intermine Login" width="500">
 </p>
 
 
 After that you will be redirected to approve the scope that client want to access.
+
 <p align="center">
   <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/approval.png" alt="Intermine Login" width="500">
 </p>
@@ -147,9 +149,6 @@ Finally you will get your token!!!!
     "scope": "READ WRITE"
 }
 ```
-
-In above grant type our rest client is handling resource server part and our client(website) so whenever we are requesting an access token that means we are trying to access the resources on client thus rest client first redirect us to login page and approval page of auth server and after our approval aur oauth server is giving authorization code to to our rest client and finally it Getting the access_token with the help of that code.
-
 
 
 3. Testing validation of access token:
