@@ -125,15 +125,19 @@ Response
 
 You will be redirected to a login screen page so make sure to enter correct credentials of admin or testUser.
 <p align="center">
-  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/login.png" alt="Intermine Login" width="400">
+  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/login.png" alt="Intermine Login" width="500">
 </p>
 
 
 After that you will be redirected to approve the scope that client want to access.
 <p align="center">
-  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/approval.png" alt="Intermine Login" width="400">
+  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/approval.png" alt="Intermine Login" width="500">
 </p>
-Finally you will get you token!!!!
+
+
+
+Finally you will get your token!!!!
+
 ```
 {
     "access_token": "a6d92574-ded3-4a6e-ac7e-6fd8950d8faf",
