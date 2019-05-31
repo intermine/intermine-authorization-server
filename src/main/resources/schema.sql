@@ -1,5 +1,6 @@
 create table if not exists  oauth_client_details (
-  client_id varchar(255) not null primary key,
+  id SERIAL PRIMARY KEY,
+  client_id varchar(255) not null UNIQUE,
   client_secret varchar(255) not null,
   web_server_redirect_uri varchar(2048) default null,
   scope varchar(255) default null,

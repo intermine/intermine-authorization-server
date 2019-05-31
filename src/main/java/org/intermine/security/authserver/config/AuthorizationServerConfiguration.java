@@ -1,5 +1,6 @@
 package org.intermine.security.authserver.config;
 
+import org.intermine.security.authserver.service.CustomClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import javax.sql.DataSource;
@@ -25,6 +27,14 @@ public class AuthorizationServerConfiguration implements AuthorizationServerConf
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    public ClientDetailsService clientDetailsService() {
+
+        CustomClientDetailsService client = new CustomClientDetailsService(this.dataSource);
+        client.setPasswordEncoder(passwordEncoder);
+        return client;
+    }
+
     @Bean
     TokenStore jdbcTokenStore() {
         return new JdbcTokenStore(dataSource);
@@ -36,8 +46,8 @@ public class AuthorizationServerConfiguration implements AuthorizationServerConf
     }
 
     @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
+    public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
+        configurer.withClientDetails(this.clientDetailsService());
     }
 
     @Override
