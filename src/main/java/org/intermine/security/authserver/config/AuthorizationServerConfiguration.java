@@ -1,5 +1,6 @@
 package org.intermine.security.authserver.config;
 
+import org.intermine.security.authserver.security.CustomPasswordEncoder;
 import org.intermine.security.authserver.service.CustomClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +19,9 @@ import javax.sql.DataSource;
 @Configuration
 public class AuthorizationServerConfiguration implements AuthorizationServerConfigurer{
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder() {
+        return new CustomPasswordEncoder();
+    }
 
     @Autowired
     private DataSource dataSource;
@@ -31,7 +33,7 @@ public class AuthorizationServerConfiguration implements AuthorizationServerConf
     public ClientDetailsService clientDetailsService() {
 
         CustomClientDetailsService client = new CustomClientDetailsService(this.dataSource);
-        client.setPasswordEncoder(passwordEncoder);
+        client.setPasswordEncoder(this.passwordEncoder());
         return client;
     }
 
@@ -55,4 +57,5 @@ public class AuthorizationServerConfiguration implements AuthorizationServerConf
         endpoints.authenticationManager(authenticationManager);
         endpoints.tokenStore(jdbcTokenStore());
     }
+
 }

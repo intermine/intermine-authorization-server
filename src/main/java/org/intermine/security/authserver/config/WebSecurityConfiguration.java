@@ -1,5 +1,6 @@
 package org.intermine.security.authserver.config;
 
+import org.intermine.security.authserver.security.CustomPasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -24,8 +25,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    PasswordEncoder passwordEncoder() {
+        return new CustomPasswordEncoder();
     }
 
     @Override
