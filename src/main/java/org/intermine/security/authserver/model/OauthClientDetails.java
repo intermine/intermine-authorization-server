@@ -28,6 +28,10 @@ public class OauthClientDetails implements ClientDetails, Serializable {
     private String clientId;
     @Column(name = "client_secret", nullable = false, unique = true)
     private String clientSecret;
+    @Column(name = "client_name",nullable = false, unique = true)
+    private String clientName;
+    @Column(name = "client_website_url",nullable = false, unique = true)
+    private String websiteUrl;
     @Column(name = "resource_ids")
     private String resourceIds;
     @Column(name = "scope")
@@ -102,6 +106,22 @@ public class OauthClientDetails implements ClientDetails, Serializable {
         this.clientSecret = clientSecret;
     }
 
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public String getWebsiteUrl() {
+        return websiteUrl;
+    }
+
+    public void setWebsiteUrl(String websiteUrl) {
+        this.websiteUrl = websiteUrl;
+    }
+
     @Override
     public boolean isScoped() {
         return this.getScope().size() > 0;
@@ -150,11 +170,8 @@ public class OauthClientDetails implements ClientDetails, Serializable {
         return result;
     }
 
-    @org.codehaus.jackson.annotate.JsonIgnore
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    public void setAuthorities(Collection<GrantedAuthority> authorities) {
-       // this.authorities = StringUtils.collectionToCommaDelimitedString(authorities);
-        this.authorities = String.valueOf(authorities);
+    public void setAuthorities(String authorities) {
+        this.authorities = authorities;
     }
 
     @Override

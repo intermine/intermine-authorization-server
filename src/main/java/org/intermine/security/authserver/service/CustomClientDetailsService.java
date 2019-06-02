@@ -2,6 +2,8 @@ package org.intermine.security.authserver.service;
 
 import org.intermine.security.authserver.model.OauthClientDetails;
 import org.intermine.security.authserver.repository.ClientDetailRepository;
+import org.intermine.security.authserver.security.CustomPasswordEncoder;
+import org.intermine.security.authserver.security.Encryption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,14 @@ import org.springframework.security.oauth2.provider.client.JdbcClientDetailsServ
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.springframework.security.crypto.keygen.KeyGenerators.secureRandom;
 
 @Service
 public class CustomClientDetailsService extends JdbcClientDetailsService {
@@ -25,8 +33,9 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
     @Autowired
     private ClientDetailRepository iOauthClientDetails;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder() {
+        return new CustomPasswordEncoder();
+    }
 
     public CustomClientDetailsService(DataSource dataSource) {
         super(dataSource);
@@ -58,31 +67,23 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
         return new BaseClientDetails(client);
     }
 
-    @Override
-    public void addClientDetails(ClientDetails clientDetails) throws ClientAlreadyExistsException {
-        try {
-            OauthClientDetails oauthClientDetail = new OauthClientDetails();
-            setOrUpdateClientDetails(oauthClientDetail, clientDetails);
-            oauthClientDetail.setClientId(clientDetails.getClientId());
-            oauthClientDetail.setClientSecret(clientDetails.getClientSecret() != null ? passwordEncoder.encode(clientDetails.getClientSecret())
-                    : null);
-            iOauthClientDetails.save(oauthClientDetail);
-            //  iOauthClientDetails.createApplication(oauthClientDetail);
-
-
-        } catch (DuplicateKeyException e) {
-            throw new ClientAlreadyExistsException("Client already exists: " + clientDetails.getClientId(), e);
-        }
-    }
-
-    private void setOrUpdateClientDetails(OauthClientDetails oauthClientDetail, ClientDetails clientDetails) {
-        oauthClientDetail.setResourceIds(clientDetails.getResourceIds());
-        oauthClientDetail.setScope(clientDetails.getScope());
-        oauthClientDetail.setAuthorizedGrantTypes(clientDetails.getAuthorizedGrantTypes());
+    public HashMap<String, String> addCustomClientDetails(OauthClientDetails clientDetails) throws ClientAlreadyExistsException, NoSuchAlgorithmException {
+        OauthClientDetails oauthClientDetail = new OauthClientDetails();
+        String currentClientId=Encryption.SHA1(secureRandom(16).generateKey())+".apps.intermine.com";
+        oauthClientDetail.setClientId(currentClientId);
+        String currentClientSecret=Encryption.SHA1(secureRandom(16).generateKey());
+        oauthClientDetail.setClientSecret(passwordEncoder().encode(currentClientSecret));
+        oauthClientDetail.setClientName(clientDetails.getClientName());
         oauthClientDetail.setRegisteredRedirectUri(clientDetails.getRegisteredRedirectUri());
-        oauthClientDetail.setAuthorities(clientDetails.getAuthorities());
-        oauthClientDetail.setAccessTokenValiditySeconds(clientDetails.getAccessTokenValiditySeconds());
-        oauthClientDetail.setRefreshTokenValiditySeconds(clientDetails.getRefreshTokenValiditySeconds());
-        //oauthClientDetail.setAdditionalInformation();
+        oauthClientDetail.setWebsiteUrl(clientDetails.getWebsiteUrl());
+        oauthClientDetail.setAccessTokenValiditySeconds(3600);
+        oauthClientDetail.setRefreshTokenValiditySeconds(10000);
+        oauthClientDetail.setScope(new HashSet<String>(Arrays.asList("READ", "WRITE")));
+        oauthClientDetail.setAuthorizedGrantTypes(new HashSet<String>(Arrays.asList("authorization_code","password","refresh_token","implicit")));
+        iOauthClientDetails.save(oauthClientDetail);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("client_id", currentClientId);
+        map.put("client_secret", currentClientSecret);
+        return map ;
     }
 }

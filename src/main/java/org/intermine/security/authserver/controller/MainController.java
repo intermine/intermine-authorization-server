@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.Map;
+
 @RestController
 public class MainController {
 
@@ -16,8 +19,8 @@ public class MainController {
 
 
     @RequestMapping(value = "/client-registration", method = RequestMethod.POST)
-    public void save(@RequestBody OauthClientDetails oauthClientDetails){
-        customClientDetailsService.addClientDetails(oauthClientDetails);
+    public Map<String, String> save(@RequestBody OauthClientDetails oauthClientDetails)throws NoSuchAlgorithmException {
+        return customClientDetailsService.addCustomClientDetails(oauthClientDetails);
     }
 
 }
