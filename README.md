@@ -15,9 +15,9 @@ This is an InterMine Authorization Server built with Spring Boot 2.x OAuth2 whic
 ### Features
 
 * OAuth2.0 Authorization Server
-* We Use Postgresql
-* We Use Jdbc Token Store
-* We Use Jpa
+* Postgresql Database
+* Jdbc Token Store
+* Jpa
 
 ## Getting Started
 
@@ -53,54 +53,43 @@ Update these configurations in application.yml file of project inside resource d
 
 
 NOTE: Resource directory contains two predefined script also for database table creation and dummy entries so no need to create any tables on your own.
-But if you are running system very first time then make sure the extension of data file in resource directory is .sql because it will create entries in the tables with primary keys so after first run either remove that file or rename it to data.txt otherwise it'll cause error in your furthur run.  
+But if you are running system very first time then make sure the extension of data file in resource directory is .sql because it will create entries in the tables with primary key so after first run either remove that file or rename it to data.txt otherwise it'll cause error in your furthur run.  
 
 ### STEP-2 Run the application
 
 Server will be up on default port 8282 but you can change it by make changes in application.yml file.   
 
 ### Oauth2 Users Credential
-| User            | Password        | Role      | Permission                            |
-|-----------------|-----------------|-----------|---------------------------------------|
-| admin           | admin123        | Admin     | Create,Read,Update & DeleteProfile    |
-| testUser        | testUser123     | Operator  | Read & Update Profile                 |
-
-### Oauth Client Credential
-| Client_id    | Client_secret  | authorized grant types                             | scope       |
-|--------------|----------------|----------------------------------------------------|-------------|
-| flymine      | fmine          | authorization_code,password,refresh_token,implicit | READ, WRITE |   
+| User     | Password                                 | Role  | Permission                         |
+|----------|------------------------------------------|-------|------------------------------------|
+| admin    | b053c35d7ad8874124316924db05fc7023633d10 | Admin | Create,Read,Update & DeleteProfile |    
 
 
 
 ## Testing the App
 
-1. Testing PASSWORD Grant type to get access_token.
-This grant type is for testing purpose only and will not present in live application of Intermine authorization server.
+1.  Register a new client
 
-Make a post request from your rest client or by curl with following parameters:
-```
-url: http://localhost:8282/oauth/token
-Authorization: Basic Auth
-               username(client_id): flymine
-               password(client_secret): fmine
-Body(form-data):: grant_type : password
-                  username   : admin
-                  password   : admin123
-```
+Make a POST request on http://localhost:8080/client-registration with following json body
 
-
-Response:
 ```
 {
-    "access_token": "a6d92574-ded3-4a6e-ac7e-6fd8950d8faf",
-    "token_type": "bearer",
-    "refresh_token": "db8f3bc2-ff39-4480-84a5-d48a80f21311",
-    "expires_in": 3509,
-    "scope": "READ WRITE"
+  "clientName": "<your-app-name",
+  "websiteUrl": "<your-appWebsite-url",
+  "registeredRedirectUri": ["<Callback-url>"]
 }
 ```
-In the above grant type client is asking for access token from authorization server with its own credentials on behalf of user i.e along with user credentials also.
 
+Response
+
+You will get your client id and secret. Make sure to store these somewhere.
+
+```
+{
+  "client_id": "1adh34gdt6ywqsf68iklop94df.apps.intermine.com",
+  "client_secret": "9ju764gbvc32wsx56gj998k"
+}
+```
 
 2. Testing the authorization_code grant type:
 
@@ -114,8 +103,8 @@ Grant Type: Authorization Code
 Callback Url: http://localhost:8080/code
 Auth Url: http://localhost:8282/oauth/authorize
 Access Token Url: http://localhost:8282/oauth/token
-Client Id: flymine
-Client Secret: fmine
+Client Id: <your-client-id>
+Client Secret: <your-client-secret>
 Scope: READ WRITE
 State:(optional)
 Client Authentication: Send as Basic Auth Header
@@ -123,7 +112,7 @@ Client Authentication: Send as Basic Auth Header
 
 Response
 
-You will be redirected to a login screen page so make sure to enter correct credentials of admin or testUser.
+You will be redirected to a login screen page so make sure to enter correct credentials of admin.
 
 <p align="center">
   <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/login.png" alt="Intermine Login" width="500">
@@ -163,8 +152,8 @@ Response :
 
 {
     "aud": [
-        "inventory",
-        "payment"
+    "Resource-1",
+    "Resource-2"
     ],
     "user_name": null,
     "scope": [
@@ -180,7 +169,7 @@ Response :
         "read_profile",
         "create_profile"
     ],
-    "client_id": "flymine"
+    "client_id": "1adh34gdt6yf.apps.intermine.com"
 }
 ```
 

@@ -3,8 +3,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/<your-database-name>?createDatabaseIfNotExist=true
-    username: <database-username>
-    password: <database-userpassword>
+    username: <your-username>
+    password: <your-password>
     driver-class-name: org.postgresql.Driver
     initialization-mode: always
   jpa:
@@ -15,6 +15,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+        enable_lazy_load_no_trans: true
 logging:
   level:
     org:
