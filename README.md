@@ -70,14 +70,16 @@ Server will be up on default port 8282 but you can change it by make changes in 
 
 1.  Register a new client
 
-Make a POST request on http://localhost:8080/client-registration with following parameters
+Make a POST request on http://localhost:8080/client-registration with following json body
 
 ```
-clientName:"<your-app-name",
-websiteUrl:"<your-appWebsite-url",
-registeredRedirectUri:["<Callback-url>"]
-
+{
+  "clientName": "<your-app-name",
+  "websiteUrl": "<your-appWebsite-url",
+  "registeredRedirectUri": ["<Callback-url>"]
+}
 ```
+
 Response
 
 You will get your client id and secret. Make sure to store these somewhere.
