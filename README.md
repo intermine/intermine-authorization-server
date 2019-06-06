@@ -172,6 +172,22 @@ Response :
     "client_id": "1adh34gdt6yf.apps.intermine.com"
 }
 ```
+4. Testing user-info endpoint :
+
+Make a get request on http://localhost:8282/user-info without any parameters.
+
+If you've already logged in then will get the user's information otherwise you'll be redirected to login page.
+Enter correct credentials of user.
+
+Response:
+
+```
+
+{
+    "username": "user"
+    "email":"user@intermine.com"
+}
+```
 
 ## Running the tests
 
