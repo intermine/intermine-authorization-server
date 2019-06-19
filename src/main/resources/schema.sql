@@ -27,22 +27,25 @@ create table if not exists role (
   name varchar(255) default null unique
 ) ;
 create table if not exists  users (
-  id serial primary key,
+  user_id serial primary key,
   username varchar(100) not null unique,
   password varchar(1024) not null,
   email varchar(1024) not null,
-  enabled smallint not null,
-  accountNonExpired smallint not null,
-  credentialsNonExpired smallint not null,
-  accountNonLocked smallint not null
+  enabled BOOLEAN not null,
+  accountNonExpired BOOLEAN not null,
+  credentialsNonExpired BOOLEAN not null,
+  accountNonLocked BOOLEAN not null,
+  first_name varchar(150) not NULL ,
+  last_name varchar(150)
 ) ;
 create table  if not exists permission_role (
   permission_id  int default null REFERENCES permission(id),
   role_id int default null references role (id)
 )  ;
 create table if not exists role_user (
-  role_id int default null references role (id),
-  user_id int default null references users (id)
+  row_id INT,
+  id int default null references role (id),
+  user_id int default null references users (user_id)
 );
 
 create table if not exists oauth_client_token (
