@@ -22,15 +22,15 @@ public class OauthClientDetails implements ClientDetails, Serializable {
     private static final long serialVersionUID = 1L;
     private static final ObjectMapper mapper = new ObjectMapper();
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "client_id", nullable = false, unique = true)
     private String clientId;
     @Column(name = "client_secret", nullable = false, unique = true)
     private String clientSecret;
-    @Column(name = "client_name",nullable = false, unique = true)
+    @Column(name = "client_name", nullable = false, unique = true)
     private String clientName;
-    @Column(name = "client_website_url",nullable = false, unique = true)
+    @Column(name = "client_website_url", nullable = false, unique = true)
     private String websiteUrl;
     @Column(name = "resource_ids")
     private String resourceIds;
@@ -50,8 +50,12 @@ public class OauthClientDetails implements ClientDetails, Serializable {
     private String autoApproveScope;
     @Column(name = "additional_information")
     private String additionalInformation;
+    @Column(name = "client_type")
+    private String clientType;
+    @Column(name = "registered_by")
+    private String registeredBy;
 
-    public OauthClientDetails(){
+    public OauthClientDetails() {
 
     }
 
@@ -225,5 +229,21 @@ public class OauthClientDetails implements ClientDetails, Serializable {
         } catch (IOException e) {
             this.additionalInformation = "";
         }
+    }
+
+    public String getClientType() {
+        return clientType;
+    }
+
+    public void setClientType(String clientType) {
+        this.clientType = clientType;
+    }
+
+    public String getRegisteredBy() {
+        return registeredBy;
+    }
+
+    public void setRegisteredBy(String registeredBy) {
+        this.registeredBy = registeredBy;
     }
 }

@@ -10,6 +10,8 @@ create table if not exists  oauth_client_details (
   refresh_token_validity int default null,
   resource_ids varchar(1024) default null,
   authorized_grant_types varchar(1024) default null,
+  client_type varchar(100) default null,
+  registered_by varchar(100) default null,
   authorities varchar(1024) default null,
   additional_information varchar(4096) default null,
   autoapprove varchar(255) default null
