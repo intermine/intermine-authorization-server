@@ -1,28 +1,62 @@
 package org.intermine.security.authserver.service;
 
+import org.intermine.security.authserver.dao.AppRoleDAO;
+import org.intermine.security.authserver.dao.AppUserDAO;
 import org.intermine.security.authserver.model.AuthUserDetail;
 import org.intermine.security.authserver.model.Users;
 import org.intermine.security.authserver.repository.UserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service("userDetailsService")
+@Transactional
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
     UserDetailRepository userDetailRepository;
+
+    @Autowired
+    private AppUserDAO appUserDAO;
+
+    @Autowired
+    private AppRoleDAO appRoleDAO;
+
     @Override
-    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        Optional<Users> optionalUser=userDetailRepository.findByUsername(name);
-        optionalUser.orElseThrow(()-> new UsernameNotFoundException("Username or password wrong"));
-        UserDetails userDetails =new AuthUserDetail(optionalUser.get());
-        new AccountStatusUserDetailsChecker().check(userDetails);
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        System.out.println("UserDetailsServiceImpl.loadUserByUsername=" + userName);
+        Users users = this.appUserDAO.findAppUserByUserName(userName);
+
+        if (users == null) {
+            System.out.println("User not found! " + userName);
+            throw new UsernameNotFoundException("User " + userName + " was not found in the database");
+        }
+
+        System.out.println("Found User: " + users);
+
+        List<String> roleNames = this.appRoleDAO.getRoleNames(users.getUserId());
+
+        List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
+        if (roleNames != null) {
+            for (String role : roleNames) {
+                GrantedAuthority authority = new SimpleGrantedAuthority(role);
+                grantList.add(authority);
+            }
+        }
+
+        SocialUserDetailsImpl userDetails = new SocialUserDetailsImpl(users, roleNames);
+
         return userDetails;
+
     }
 }

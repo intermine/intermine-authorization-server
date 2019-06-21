@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Intermine Client Registration </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var i = 1;
+            $('.add').on('click', function() {
+                var field = '<br><div><input type="text" class="form-control" name="registeredRedirectUri" id="registeredRedirectUri" th:field="*{registeredRedirectUri}"</div>';
+                $('.appending_div').append(field);
+                i = i+1;
+            })
+        })
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="custom.css">
+</head>
+<body>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <img src="intermine.png" width="700" height="80" >
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-6">
+
+            <div class="alert alert-danger" th:if="${errorMessage != null}" th:text="${errorMessage}">
+            </div>
+            <form th:object="${myForm}" method="POST">
+                <div class="form-group">
+                    <label for="clientName">Client Name:</label>
+                    <input type="text" class="form-control" id="clientName" autofocus th:field="*{clientName}"><br/>
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('clientName')}" th:errors="*{clientName}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="clientType" >Client Type:</label><br>
+
+                    <input type="radio" name="clientType" value="webApplication" checked > Web Application<br>
+                    <input type="radio" name="clientType"   value="android"> Android<br>
+                    <input type="radio" name="clientType"   value="iOS"> iOS <br>
+                    <input type="radio" name="clientType" value="other"> other <br>
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('clientType')}" th:errors="*{clientType}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="websiteUrl">Website Url:</label>
+                    <input type="text" class="form-control" id="websiteUrl" th:field="*{websiteUrl}"><br/>
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('websiteUrl')}" th:errors="*{websiteUrl}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="registeredRedirectUri">Redirect URIs:</label>
+                    <span class="fa fa-plus add"></span>
+                    <div class="appending_div">
+                        <div>
+                            <input type="text" class="form-control" name="registeredRedirectUri" id="registeredRedirectUri" th:field="*{registeredRedirectUri}">
+
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('registeredRedirectUri')}" th:errors="*{registeredRedirectUri}">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="p-2"><a href="/"><button type="button" class="btn btn-secondary">Back</button></a></div>
+                    <div class="p-2"></div>
+                    <div class="p-2"><button type="submit" class="btn btn-info">Register Client</button></div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="col-sm-3">
+        </div>
+    </div>
+</div>
+</body>
+</html>
