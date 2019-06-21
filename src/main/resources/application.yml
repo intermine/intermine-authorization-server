@@ -11,11 +11,17 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         enable_lazy_load_no_trans: true
+        dialect: org.hibernate.dialect.PostgreSQL94Dialect
+
+  thymeleaf:
+    cache: false
+
 logging:
   level:
     org:
