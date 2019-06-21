@@ -52,46 +52,62 @@ GRANT ALL PRIVILEGES ON DATABASE <your dbname> TO <your user>;
 Update these configurations in application.yml file of project inside resource directory.
 
 
-NOTE: Resource directory contains two predefined script also for database table creation and dummy entries so no need to create any tables on your own.
-But if you are running system very first time then make sure the extension of data file in resource directory is .sql because it will create entries in the tables with primary key so after first run either remove that file or rename it to data.txt otherwise it'll cause error in your furthur run.  
+NOTE: Resource directory contains a predefined script for database table creation so no need to create any tables on your own.  
 
 ### STEP-2 Run the application
 
+Clone this repo on your local system and follow these commands:
+
+i. Change directory to this project
+
+```
+cd intermine-authorization-server/
+```
+
+ii. Build using mvn
+
+```
+mvn pacakage
+```
+
+iii. Run jar file using java
+
+```
+java -jar target/authserver-0.0.1-SNAPSHOT.jar
+```
+
 Server will be up on default port 8282 but you can change it by make changes in application.yml file.   
-
-### Oauth2 Users Credential
-| User     | Password                                 | Role  | Permission                         |
-|----------|------------------------------------------|-------|------------------------------------|
-| admin    | b053c35d7ad8874124316924db05fc7023633d10 | Admin | Create,Read,Update & DeleteProfile |    
-
 
 
 ## Testing the App
 
-1.  Register a new client
+1. Create a New account on IM auth server
 
-Make a POST request on http://localhost:8080/client-registration with following json body
+Open http://localhost:8282/login in any web browser. You will be redirected to a login screen page and thus create a new account.
 
-```
-{
-  "clientName": "<your-app-name",
-  "websiteUrl": "<your-appWebsite-url",
-  "registeredRedirectUri": ["<Callback-url>"]
-}
-```
+<p align="center">
+  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/login.png" alt="Intermine Login" width="500">
+</p>
+
+2.  Register a new client
+
+
+Only those user can register a client on Intermine auth server which are having account on it. Open http://localhost:8282 in any web browser and you will be redirected to Intermine auth server dashboard from which you can register a new client after login.
+
+<p align="center">
+  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/client_registration.png" alt="Intermine Login" width="500">
+</p>
 
 Response
 
 You will get your client id and secret. Make sure to store these somewhere.
 
-```
-{
-  "client_id": "1adh34gdt6ywqsf68iklop94df.apps.intermine.com",
-  "client_secret": "9ju764gbvc32wsx56gj998k"
-}
-```
+<p align="center">
+  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/client_credentials.png" alt="Intermine Login" width="500">
+</p>
 
-2. Testing the authorization_code grant type:
+
+3. Testing the authorization_code grant type:
 
 For this grant type we need a client and a resource but this is our auth server only so we can test this grant type by using any rest client like postman.
 
@@ -140,7 +156,7 @@ Finally you will get your token!!!!
 ```
 
 
-3. Testing validation of access token:
+4. Testing validation of access token:
 In real application only resource server can validate this token but for here we can test by following request:
 Make a Get request with following paramters
 ```
@@ -172,7 +188,7 @@ Response :
     "client_id": "1adh34gdt6yf.apps.intermine.com"
 }
 ```
-4. Testing user-info endpoint :
+5. Testing user-info endpoint :
 
 Make a get request on http://localhost:8282/user-info without any parameters.
 
