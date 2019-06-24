@@ -94,11 +94,12 @@ public class MainController {
 
     @RequestMapping(value = "/user-info", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, String> currentUserName(Authentication authentication) {
-        Users user= (Users) authentication.getPrincipal();
+    public Map<String, String> currentUserName(Principal principal) {
+        Users user= appUserDAO.findAppUserByUserName(principal.getName());
         Map<String, String> map = new LinkedHashMap<>();
         map.put("username",user.getUsername());
         map.put("email",user.getEmail());
+        map.put("sub", String.valueOf(user.getUserId()));
         return map;
     }
 
