@@ -83,7 +83,7 @@ Server will be up on default port 8282 but you can change it by make changes in 
 
 1. Create a New account on IM auth server
 
-Open http://localhost:8282/login in any web browser. You will be redirected to a login screen page and thus create a new account.
+Open http://localhost:8282/intermine/login in any web browser. You will be redirected to a login screen page and thus create a new account.
 
 <p align="center">
   <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/login.png" alt="Intermine Login" width="500">
@@ -92,7 +92,7 @@ Open http://localhost:8282/login in any web browser. You will be redirected to a
 2.  Register a new client
 
 
-Only those user can register a client on Intermine auth server which are having account on it. Open http://localhost:8282 in any web browser and you will be redirected to Intermine auth server dashboard from which you can register a new client after login.
+Only those user can register a client on Intermine auth server which are having account on it. Open http://localhost:8282/intermine in any web browser and you will be redirected to Intermine auth server dashboard from which you can register a new client after login.
 
 <p align="center">
   <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/client_registration.png" alt="Intermine Login" width="500">
@@ -190,7 +190,7 @@ Response :
 ```
 5. Testing user-info endpoint :
 
-Make a get request on http://localhost:8282/user-info without any parameters.
+Make a get request on http://localhost:8282/intermine/user-info without any parameters.
 
 If you've already logged in then will get the user's information otherwise you'll be redirected to login page.
 Enter correct credentials of user.
