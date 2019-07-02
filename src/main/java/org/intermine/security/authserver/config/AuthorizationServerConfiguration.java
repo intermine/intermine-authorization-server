@@ -45,6 +45,9 @@ public class AuthorizationServerConfiguration implements AuthorizationServerConf
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.checkTokenAccess("permitAll()");
+        security.tokenKeyAccess("permitAll()")
+                .passwordEncoder(this.passwordEncoder())
+                .allowFormAuthenticationForClients();
     }
 
     @Override
