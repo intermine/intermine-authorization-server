@@ -1,5 +1,7 @@
 package org.intermine.security.authserver.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import org.intermine.security.authserver.dao.AppUserDAO;
 import org.intermine.security.authserver.form.AppUserForm;
 import org.intermine.security.authserver.form.ClientForm;
@@ -11,8 +13,13 @@ import org.intermine.security.authserver.utils.SecurityUtil;
 import org.intermine.security.authserver.utils.WebUtils;
 import org.intermine.security.authserver.validator.AppUserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.jwt.Jwt;
+import org.springframework.security.jwt.JwtHelper;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
@@ -26,7 +33,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.*;
@@ -94,13 +103,19 @@ public class MainController {
 
     @RequestMapping(value = "/user-info", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, String> currentUserName(Principal principal) {
-        Users user= appUserDAO.findAppUserByUserName(principal.getName());
-        Map<String, String> map = new LinkedHashMap<>();
-        map.put("username",user.getUsername());
-        map.put("email",user.getEmail());
-        map.put("sub", String.valueOf(user.getUserId()));
-        return map;
+    public ResponseEntity<?> currentUserName(HttpServletRequest request) throws IOException {
+        String token=request.getHeader("Authorization").split("Bearer ")[1];
+        ObjectMapper objectMapper = new ObjectMapper();
+        Jwt jwt = JwtHelper.decode(token);
+        Map claims = objectMapper.readValue(jwt.getClaims(), Map.class);
+        String name = (String) claims.get("name");
+        String email =(String) claims.get("email");
+        String sub = (String) claims.get("sub");
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name",name);
+        jsonObject.addProperty("email",email);
+        jsonObject.addProperty("sub",sub);
+        return new ResponseEntity<>(jsonObject.toString(), HttpStatus.FOUND);
     }
 
     @RequestMapping(value = "/403", method = RequestMethod.GET)
