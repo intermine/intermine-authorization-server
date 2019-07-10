@@ -53,7 +53,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/", "/signup", "/login", "/logout").permitAll();
-        http.authorizeRequests().antMatchers("/userInfo","/user-info").access("hasRole('" + Role.ROLE_USER + "')");
+        http.authorizeRequests().antMatchers("/userInfo").access("hasRole('" + Role.ROLE_USER + "')");
         http.authorizeRequests().antMatchers("/admin").access("hasRole('" + Role.ROLE_ADMIN + "')");
         http.authorizeRequests().antMatchers("/clientRegistration").access("hasRole('" + Role.ROLE_USER + "')");
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
