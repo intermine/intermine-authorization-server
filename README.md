@@ -83,7 +83,7 @@ Server will be up on default port 8282 but you can change it by make changes in 
 
 1. Create a New account on IM auth server
 
-Open http://localhost:8282/login in any web browser. You will be redirected to a login screen page and thus create a new account.
+Open http://localhost:8282/intermine/login in any web browser. You will be redirected to a login screen page and thus create a new account.
 
 <p align="center">
   <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/login.png" alt="Intermine Login" width="500">
@@ -92,7 +92,7 @@ Open http://localhost:8282/login in any web browser. You will be redirected to a
 2.  Register a new client
 
 
-Only those user can register a client on Intermine auth server which are having account on it. Open http://localhost:8282 in any web browser and you will be redirected to Intermine auth server dashboard from which you can register a new client after login.
+Only those user can register a client on Intermine auth server which are having account on it. Open http://localhost:8282/intermine in any web browser and you will be redirected to Intermine auth server dashboard from which you can register a new client after login.
 
 <p align="center">
   <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/client_registration.png" alt="Intermine Login" width="500">
@@ -116,14 +116,14 @@ Choose Authorization as OAuth2.0 in your rest client and request a new access to
 ```
 Token Name: <your token name>
 Grant Type: Authorization Code
-Callback Url: http://localhost:8080/code
-Auth Url: http://localhost:8282/oauth/authorize
-Access Token Url: http://localhost:8282/oauth/token
+Callback Url: <your registered URL>
+Auth Url: http://localhost:8282/intermine/oauth/authorize
+Access Token Url: http://localhost:8282/intermine/oauth/token
 Client Id: <your-client-id>
 Client Secret: <your-client-secret>
-Scope: READ WRITE
+Scope: openid profile email
 State:(optional)
-Client Authentication: Send as Basic Auth Header
+Client Authentication: Send client credentials in body
 ```
 
 Response
@@ -147,11 +147,11 @@ Finally you will get your token!!!!
 
 ```
 {
-    "access_token": "a6d92574-ded3-4a6e-ac7e-6fd8950d8faf",
+    "access_token": "eyJhbGciOiJS......gZpfbflmoTw",
     "token_type": "bearer",
-    "refresh_token": "db8f3bc2-ff39-4480-84a5-d48a80f21311",
+    "refresh_token": "eyJhbGciOiJSUzI1N....BOUe5_w",
     "expires_in": 3509,
-    "scope": "READ WRITE"
+    "scope": "openid profile email"
 }
 ```
 
@@ -160,48 +160,41 @@ Finally you will get your token!!!!
 In real application only resource server can validate this token but for here we can test by following request:
 Make a Get request with following paramters
 ```
-url: http://localhost:8282/oauth/check_token?token=<your access token>
+url: http://localhost:8282/intermine/oauth/check_token?token=<your access token>
 
 ```
 Response :
 ```
 
 {
-    "aud": [
-    "Resource-1",
-    "Resource-2"
-    ],
-    "user_name": null,
-    "scope": [
-        "READ",
-        "WRITE"
-    ],
     "active": true,
-    "exp": 1558779057,
+    "exp": 1562738689,
+    "user_name": "<your username>",
     "authorities": [
-        "ROLE_admin",
-        "delete_profile",
-        "update_profile",
-        "read_profile",
-        "create_profile"
+        "ROLE_USER"
     ],
-    "client_id": "1adh34gdt6yf.apps.intermine.com"
+    "client_id": "393c9bc0b8037080c934b4b9d524cf4e.apps.intermine.com",
+    "scope": [
+        "openid",
+        "profile",
+        "email"
+    ]
 }
 ```
 5. Testing user-info endpoint :
 
-Make a get request on http://localhost:8282/user-info without any parameters.
+Make a get request on http://localhost:8282/intermine/user-info with Bearer access token as Authorization header
 
-If you've already logged in then will get the user's information otherwise you'll be redirected to login page.
-Enter correct credentials of user.
+
 
 Response:
 
 ```
 
 {
-    "username": "user"
-    "email":"user@intermine.com"
+    "name": "firstname",
+    "email":"user@intermine.com",
+    "sub":"user_id"
 }
 ```
 

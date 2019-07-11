@@ -78,7 +78,9 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
         oauthClientDetail.setWebsiteUrl(clientDetails.getWebsiteUrl());
         oauthClientDetail.setAccessTokenValiditySeconds(3600);
         oauthClientDetail.setRefreshTokenValiditySeconds(10000);
-        oauthClientDetail.setScope(new HashSet<String>(Arrays.asList("READ", "WRITE")));
+        oauthClientDetail.setRegisteredBy(clientDetails.getRegisteredBy());
+        oauthClientDetail.setClientType(clientDetails.getClientType());
+        oauthClientDetail.setScope(new HashSet<String>(Arrays.asList("openid", "profile","email")));
         oauthClientDetail.setAuthorizedGrantTypes(new HashSet<String>(Arrays.asList("authorization_code","password","refresh_token","implicit")));
         iOauthClientDetails.save(oauthClientDetail);
         HashMap<String, String> map = new HashMap<>();

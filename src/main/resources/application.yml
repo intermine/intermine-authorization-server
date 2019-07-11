@@ -1,5 +1,7 @@
 server:
   port: 8282
+  servlet:
+    context-path: /intermine
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/<your-database-name>?createDatabaseIfNotExist=true
