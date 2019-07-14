@@ -7,7 +7,7 @@ server:
         enabled: false
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/<your-database-name>?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/<your-database-name?createDatabaseIfNotExist=true
     username: <your-username>
     password: <your-password>
     driver-class-name: org.postgresql.Driver
