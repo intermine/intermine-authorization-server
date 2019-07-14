@@ -33,19 +33,18 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
     @Autowired
     private ClientDetailRepository iOauthClientDetails;
 
-    private PasswordEncoder passwordEncoder() {
-        return new CustomPasswordEncoder();
-    }
-
     public CustomClientDetailsService(DataSource dataSource) {
         super(dataSource);
+    }
+
+    private PasswordEncoder passwordEncoder() {
+        return new CustomPasswordEncoder();
     }
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
 
         Optional<OauthClientDetails> oauthClientDetails = iOauthClientDetails.findByClientId(clientId);
-
 
 
         if (!oauthClientDetails.isPresent()) {
@@ -67,11 +66,21 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
         return new BaseClientDetails(client);
     }
 
+    public OauthClientDetails loadClientByClientName(String clientName) {
+        OauthClientDetails oauthClientDetails = iOauthClientDetails.findByClientName(clientName);
+        return oauthClientDetails;
+    }
+
+    public OauthClientDetails loadClientByWebsiteUrl(String websiteUrl) {
+        OauthClientDetails oauthClientDetails = iOauthClientDetails.findByWebsiteUrl(websiteUrl);
+        return oauthClientDetails;
+    }
+
     public HashMap<String, String> addCustomClientDetails(OauthClientDetails clientDetails) throws ClientAlreadyExistsException, NoSuchAlgorithmException {
         OauthClientDetails oauthClientDetail = new OauthClientDetails();
-        String currentClientId=Encryption.SHA1(secureRandom(16).generateKey())+".apps.intermine.com";
+        String currentClientId = Encryption.SHA1(secureRandom(16).generateKey()) + ".apps.intermine.com";
         oauthClientDetail.setClientId(currentClientId);
-        String currentClientSecret=Encryption.SHA1(secureRandom(16).generateKey());
+        String currentClientSecret = Encryption.SHA1(secureRandom(16).generateKey());
         oauthClientDetail.setClientSecret(passwordEncoder().encode(currentClientSecret));
         oauthClientDetail.setClientName(clientDetails.getClientName());
         oauthClientDetail.setRegisteredRedirectUri(clientDetails.getRegisteredRedirectUri());
@@ -80,12 +89,12 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
         oauthClientDetail.setRefreshTokenValiditySeconds(10000);
         oauthClientDetail.setRegisteredBy(clientDetails.getRegisteredBy());
         oauthClientDetail.setClientType(clientDetails.getClientType());
-        oauthClientDetail.setScope(new HashSet<String>(Arrays.asList("openid", "profile","email")));
-        oauthClientDetail.setAuthorizedGrantTypes(new HashSet<String>(Arrays.asList("authorization_code","password","refresh_token","implicit")));
+        oauthClientDetail.setScope(new HashSet<String>(Arrays.asList("openid", "profile", "email")));
+        oauthClientDetail.setAuthorizedGrantTypes(new HashSet<String>(Arrays.asList("authorization_code", "password", "refresh_token", "implicit")));
         iOauthClientDetails.save(oauthClientDetail);
         HashMap<String, String> map = new HashMap<>();
         map.put("client_id", currentClientId);
         map.put("client_secret", currentClientSecret);
-        return map ;
+        return map;
     }
 }
