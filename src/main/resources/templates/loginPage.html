@@ -46,12 +46,13 @@
                     </div>
                     <div class="form-group">
                         <label for="pwd">Password:</label>
-                        <input type="password" class="form-control" id="pwd" name="password">
+                        <input type="password" class="form-control" id="pwd" name="password"><br>
+                        <input type="checkbox" onclick="myFunction()">  Show Password
                     </div>
                     <div class="d-flex justify-content-between mb-3">
                         <div class="p-2"><a href="/intermine/signup"><button type="button" class="btn btn-success">Create New Account</button></a></div>
                         <div class="p-2"></div>
-                        <div class="p-2"><button type="submit" name="submit" class="btn btn-info">Sigin in</button></div>
+                        <div class="p-2"><button type="submit" name="submit" class="btn btn-info">Sign in</button></div>
                     </div>
                 </form>
             </div>
@@ -61,4 +62,14 @@
     </div>
 </div>
 </body>
+<script>
+    function myFunction() {
+        var x = document.getElementById("pwd");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+</script>
 </html>
