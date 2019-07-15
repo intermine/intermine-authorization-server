@@ -12,16 +12,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientAlreadyExistsException;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
+import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.security.crypto.keygen.KeyGenerators.secureRandom;
@@ -76,6 +74,11 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
         return oauthClientDetails;
     }
 
+    public List<OauthClientDetails> loadClientByUsername(String registeredBy) {
+        List<OauthClientDetails> oauthClientDetails = iOauthClientDetails.findAllByRegisteredBy(registeredBy);
+        return oauthClientDetails;
+    }
+
     public HashMap<String, String> addCustomClientDetails(OauthClientDetails clientDetails) throws ClientAlreadyExistsException, NoSuchAlgorithmException {
         OauthClientDetails oauthClientDetail = new OauthClientDetails();
         String currentClientId = Encryption.SHA1(secureRandom(16).generateKey()) + ".apps.intermine.com";
@@ -96,5 +99,12 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
         map.put("client_id", currentClientId);
         map.put("client_secret", currentClientSecret);
         return map;
+    }
+
+    public void updateClientRedirectUri(String clientName, String redirectUri) throws NoSuchClientException {
+        OauthClientDetails oauthClientDetails = iOauthClientDetails.findByClientName(clientName);
+        String tesss = redirectUri.substring(1, redirectUri.length() - 1);
+        oauthClientDetails.setRegisteredRedirectUri(Collections.singleton(tesss));
+        iOauthClientDetails.save(oauthClientDetails);
     }
 }
