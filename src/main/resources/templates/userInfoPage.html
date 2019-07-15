@@ -29,10 +29,16 @@
             Username
             <h2 th:utext="${#request.userPrincipal.name}"></h2>
             <div th:if="${userInfo != null}" th:utext="${userInfo}"></div>
+            <div class="p-2"><button  id="registeredClients" name="Your Registered Clients"   class="btn btn-info">Your Registered Clients </button></div>
         </div>
         <div class="col-sm-3">
         </div>
     </div>
 </div>
 </body>
+<script type="text/javascript">
+    document.getElementById("registeredClients").onclick = function () {
+        location.href = "/intermine/registeredClients";
+    };
+</script>
 </html>
