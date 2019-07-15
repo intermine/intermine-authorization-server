@@ -241,4 +241,19 @@ public class MainController {
 
         return "redirect:/userInfo";
     }
+
+    @RequestMapping(value = "/registeredClients", method = RequestMethod.GET)
+    public String registeredClientsInfo(Model model, Principal principal) {
+        String userName = principal.getName();
+        System.out.println("User Name: " + userName);
+        List<OauthClientDetails> clientList=customClientDetailsService.loadClientByUsername(userName);
+        model.addAttribute("clientList", clientList);
+        return "registeredClientsPage";
+    }
+
+    @RequestMapping(value={"/updateClient"},method=RequestMethod.POST)
+    public String clientUpdate(@RequestParam(value="registeredRedirectUri",required=false) String redirecturi, @RequestParam(value = "ClientName",required = false) String clientName){
+        customClientDetailsService.updateClientRedirectUri(clientName,redirecturi);
+        return "redirect:/registeredClients";
+    }
 }
