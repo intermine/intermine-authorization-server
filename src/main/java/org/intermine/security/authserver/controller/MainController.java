@@ -12,6 +12,7 @@ import org.intermine.security.authserver.service.CustomClientDetailsService;
 import org.intermine.security.authserver.utils.SecurityUtil;
 import org.intermine.security.authserver.utils.WebUtils;
 import org.intermine.security.authserver.validator.AppUserValidator;
+import org.intermine.security.authserver.validator.ClientValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +60,9 @@ public class MainController {
     @Autowired
     private AppUserValidator appUserValidator;
 
+    @Autowired
+    private ClientValidator clientValidator;
+
     @InitBinder
     protected void initBinder(WebDataBinder dataBinder) {
 
@@ -70,6 +74,9 @@ public class MainController {
 
         if (target.getClass() == AppUserForm.class) {
             dataBinder.setValidator(appUserValidator);
+        }
+        else if(target.getClass()==ClientForm.class){
+            dataBinder.setValidator(clientValidator);
         }
     }
 
@@ -172,8 +179,10 @@ public class MainController {
     }
 
     @RequestMapping(value = {"/clientRegistration"},method = RequestMethod.POST)
-    public String clientSave(Model model,@ModelAttribute("myForm") ClientForm clientForm, Principal principal,
-                             BindingResult result){
+    public String clientSave(Model model,
+                             @ModelAttribute("myForm") @Validated ClientForm clientForm,
+                             BindingResult result,
+                             Principal principal){
         if(result.hasErrors()){return "clientRegistrationPage";}
 
         try{
@@ -231,5 +240,20 @@ public class MainController {
         SecurityUtil.logInUser(registered, roleNames);
 
         return "redirect:/userInfo";
+    }
+
+    @RequestMapping(value = "/registeredClients", method = RequestMethod.GET)
+    public String registeredClientsInfo(Model model, Principal principal) {
+        String userName = principal.getName();
+        System.out.println("User Name: " + userName);
+        List<OauthClientDetails> clientList=customClientDetailsService.loadClientByUsername(userName);
+        model.addAttribute("clientList", clientList);
+        return "registeredClientsPage";
+    }
+
+    @RequestMapping(value={"/updateClient"},method=RequestMethod.POST)
+    public String clientUpdate(@RequestParam(value="registeredRedirectUri",required=false) String redirecturi, @RequestParam(value = "ClientName",required = false) String clientName){
+        customClientDetailsService.updateClientRedirectUri(clientName,redirecturi);
+        return "redirect:/registeredClients";
     }
 }

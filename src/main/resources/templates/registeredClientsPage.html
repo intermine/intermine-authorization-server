@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Intermine </title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="custom.css" rel="stylesheet">
+</head>
+<body>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <img height="80" src="intermine.png" width="700">
+    </div>
+</div>
+</div>
+<div class="container">
+    <nav>
+        <div class="nav-wrapper" >
+            <ul class="left hide-on-med-and-down" id="nav-mobile">
+                <li><a href="/intermine">Home</a></li>
+                <li><a href="/intermine/userInfo">User Info</a></li>
+                <li><a href="/intermine/clientRegistration">Register Client</a></li>
+                <li><a href="/intermine/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col-sm-3">
+        </div>
+                <div class="col-sm-3">
+                    <h3>Registered Clients By You:</h3>
+                </div>
+        <tr th:each="client: ${clientList}">
+        <div class="col-sm-3">
+            <ul class="collapsible">
+                <li>
+                    <div class="collapsible-header"><td th:text="${client.clientName}"></td></div>
+                    <div class="collapsible-body"><span>
+                        <div class="col-sm-3">
+                        <div class="row">
+
+<form  th:object="${updateClient}" th:action="@{/updateClient}" method="POST">
+
+
+     <div class="row">
+        <div class="input-field col s6">
+            <input id="ClientName" type="hidden" class="validate" th:value="${client.clientName}" th:name="ClientName">
+            <input disabled value="I am not editable" id="websiteUrl" type="text" class="validate" th:value="${client.websiteUrl}" >
+          <label for="websiteUrl">Website Url</label>
+        </div>
+      </div>
+
+        <div class="row">
+        <div class="input-field col s6">
+            <input disabled value="I am not editable" id="Client_type" type="text" class="validate" th:value="${client.clientType}">
+          <label for="Client_type">Client Type</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+            <input disabled value="I am not editable" id="clientId" type="text" class="validate" th:value="${client.clientId}" >
+          <label for="clientId">Client Id</label>
+        </div>
+      </div>
+        <div class="row">
+        <div class="input-field col s12">
+            <input disabled value="I am not editable" id="Client_secret" type="text" class="validate" th:value="${client.clientSecret}">
+          <label for="Client_secret">Client Secret</label>
+        </div>
+      </div>
+
+
+
+        <div class="row">
+        <div class="input-field col s12">
+
+        <input class="validate" id="registeredRedirectUri" th:value="${client.registeredRedirectUri}"  type="text" th:name="registeredRedirectUri">
+                  <label for="registeredRedirectUri">Redirect Uri</label>
+
+
+        </div>
+      </div>
+    <button type="submit" value="Submit">Submit</button>
+  <button type="reset" value="Reset">Reset</button>
+    </form>
+  </div>
+
+                        </div>
+                    </span></div>
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+</div>
+</body>
+<style>
+    nav {
+        background-color: #17a2b8;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.collapsible').collapsible();
+    });
+
+</script>
+<script >
+    function handleEdit() {
+        document.getElementById('name').disabled = false;
+        document.getElementById('postcode').disabled = false;
+        document.getElementById('edit').hidden = false;
+        document.getElementById('save').hidden = true;
+
+        return false;
+    }
+</script>
+</html>
