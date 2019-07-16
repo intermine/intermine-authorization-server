@@ -48,27 +48,27 @@
      <div class="row">
         <div class="input-field col s6">
             <input id="ClientName" type="hidden" class="validate" th:value="${client.clientName}" th:name="ClientName">
-            <input disabled value="I am not editable" id="websiteUrl" type="text" class="validate" th:value="${client.websiteUrl}" >
+            <input value="I am not editable" id="websiteUrl" type="text" class="validate" th:value="${client.websiteUrl}" readonly>
           <label for="websiteUrl">Website Url</label>
         </div>
       </div>
 
         <div class="row">
         <div class="input-field col s6">
-            <input disabled value="I am not editable" id="Client_type" type="text" class="validate" th:value="${client.clientType}">
+            <input value="I am not editable" id="Client_type" type="text" class="validate" th:value="${client.clientType}" readonly>
           <label for="Client_type">Client Type</label>
         </div>
       </div>
 
       <div class="row">
         <div class="input-field col s12">
-            <input disabled value="I am not editable" id="clientId" type="text" class="validate" th:value="${client.clientId}" >
+            <input value="I am not editable" id="clientId" type="text" class="validate" th:value="${client.clientId}" readonly>
           <label for="clientId">Client Id</label>
         </div>
       </div>
         <div class="row">
         <div class="input-field col s12">
-            <input disabled value="I am not editable" id="Client_secret" type="text" class="validate" th:value="${client.clientSecret}">
+            <input value="I am not editable" id="Client_secret" type="text" class="validate" th:value="${client.clientSecret}" readonly>
           <label for="Client_secret">Client Secret</label>
         </div>
       </div>
@@ -84,8 +84,9 @@
 
         </div>
       </div>
-    <button type="submit" value="Submit">Submit</button>
-  <button type="reset" value="Reset">Reset</button>
+    <button type="submit" value="Submit" name="update" class="btn btn-success">Update</button>
+  <button type="reset" value="Reset" class="btn btn-warning">Reset</button>
+  <button type="submit" value="Submit" name="delete" class="btn btn-danger">Delete</button>
     </form>
   </div>
 
@@ -103,6 +104,15 @@
     nav {
         background-color: #17a2b8;
     }
+     .btn-success{
+        background: #5cb85c;;
+        }
+        .btn-danger{
+        background: #d9534f;
+        }
+        .btn-warning{
+        background: #f0ad4e;
+        }
 </style>
 <script>
     $(document).ready(function () {
