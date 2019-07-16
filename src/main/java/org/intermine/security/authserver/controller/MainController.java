@@ -251,9 +251,15 @@ public class MainController {
         return "registeredClientsPage";
     }
 
-    @RequestMapping(value={"/updateClient"},method=RequestMethod.POST)
+    @RequestMapping(value={"/updateClient"},method=RequestMethod.POST,params = "update")
     public String clientUpdate(@RequestParam(value="registeredRedirectUri",required=false) String redirecturi, @RequestParam(value = "ClientName",required = false) String clientName){
         customClientDetailsService.updateClientRedirectUri(clientName,redirecturi);
+        return "redirect:/registeredClients";
+    }
+
+    @RequestMapping(value={"/updateClient"},method=RequestMethod.POST,params = "delete")
+    public String clientDelete(@RequestParam(value = "ClientName",required = false) String clientName){
+        customClientDetailsService.deleteClient(clientName);
         return "redirect:/registeredClients";
     }
 }
