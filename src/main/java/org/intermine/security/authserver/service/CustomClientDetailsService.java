@@ -107,4 +107,8 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
         oauthClientDetails.setRegisteredRedirectUri(Collections.singleton(tesss));
         iOauthClientDetails.save(oauthClientDetails);
     }
+
+    public void deleteClient(String clientName){
+        iOauthClientDetails.deleteByClientName(clientName);
+    }
 }
