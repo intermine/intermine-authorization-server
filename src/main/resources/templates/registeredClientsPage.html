@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Intermine </title>
     <meta charset="utf-8">
@@ -41,59 +41,47 @@
                     <div class="collapsible-body"><span>
                         <div class="col-sm-3">
                         <div class="row">
-
 <form  th:object="${updateClient}" th:action="@{/updateClient}" method="POST">
 
-
      <div class="row">
-        <div class="input-field col s6">
+        <div class="col s6">
             <input id="ClientName" type="hidden" class="validate" th:value="${client.clientName}" th:name="ClientName">
-            <input value="I am not editable" id="websiteUrl" type="text" class="validate" th:value="${client.websiteUrl}" readonly>
-          <label for="websiteUrl">Website Url</label>
+          <label>Website Url: <input value="I am not editable" id="websiteUrl" type="text" class="validate" th:value="${client.websiteUrl}" readonly></label>
         </div>
       </div>
-
         <div class="row">
-        <div class="input-field col s6">
-            <input value="I am not editable" id="Client_type" type="text" class="validate" th:value="${client.clientType}" readonly>
-          <label for="Client_type">Client Type</label>
+        <div class="col s6">
+           <label>Client Type: <input value="I am not editable" id="Client_type" type="text" class="validate" th:value="${client.clientType}" readonly></label>
         </div>
       </div>
 
       <div class="row">
-        <div class="input-field col s12">
-            <input value="I am not editable" id="clientId" type="text" class="validate" th:value="${client.clientId}" readonly>
-          <label for="clientId">Client Id</label>
+        <div class="col s12">
+            <label>Client Id: <input value="I am not editable" id="clientId" type="text" class="validate" th:value="${client.clientId}" readonly></label>
         </div>
       </div>
         <div class="row">
-        <div class="input-field col s12">
-            <input value="I am not editable" id="Client_secret" type="text" class="validate" th:value="${client.clientSecret}" readonly>
-          <label for="Client_secret">Client Secret</label>
+        <div class="col s12">
+            <label>Client Secret: <input value="I am not editable" id="Client_secret" type="text" class="validate" th:value="${client.clientSecret}" readonly></label>
         </div>
       </div>
-
-
 
         <div class="row">
-        <div class="input-field col s12">
-
-        <input class="validate" id="registeredRedirectUri" th:value="${client.registeredRedirectUri}"  type="text" th:name="registeredRedirectUri">
-                  <label for="registeredRedirectUri">Redirect Uri</label>
-
-
+        <div class="col s12">
+       <label >Redirect Uri: <input class="validate" id="registeredRedirectUri" th:value="${client.registeredRedirectUri}"  type="text" th:name="registeredRedirectUri"></label>
         </div>
       </div>
+
     <button type="submit" value="Submit" name="update" class="btn btn-success">Update</button>
   <button type="reset" value="Reset" class="btn btn-warning">Reset</button>
   <button type="submit" value="Submit" name="delete" class="btn btn-danger">Delete</button>
     </form>
   </div>
-
-                        </div>
-                    </span></div>
-                </li>
-            </ul>
+</div>
+</span>
+</div>
+</li>
+</ul>
 
 
         </div>
