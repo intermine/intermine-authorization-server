@@ -21,7 +21,7 @@ public class CustomTokenConverter extends JwtAccessTokenConverter {
                                      OAuth2Authentication authentication) {
         final Map<String, Object> additionalInfo = new HashMap<String, Object>();
         SocialUserDetailsImpl user = (SocialUserDetailsImpl) authentication.getPrincipal();
-        additionalInfo.put("name", user.getFirstName());
+        additionalInfo.put("name", user.getName());
         additionalInfo.put("email", user.getEmail());
         try {
             additionalInfo.put("sub", Encryption.EncryptAESCBCPCKS5Padding(user.getUserId()));

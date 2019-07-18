@@ -28,15 +28,14 @@ create table if not exists role (
 ) ;
 create table if not exists  users (
   user_id serial primary key,
+  name varchar(255) not NULL,
   username varchar(100) not null unique,
   password varchar(1024) not null,
   email varchar(1024) not null,
   enabled BOOLEAN not null,
   accountNonExpired BOOLEAN not null,
   credentialsNonExpired BOOLEAN not null,
-  accountNonLocked BOOLEAN not null,
-  first_name varchar(150) not NULL ,
-  last_name varchar(150)
+  accountNonLocked BOOLEAN not null
 ) ;
 create table  if not exists permission_role (
   permission_id  int default null REFERENCES permission(id),

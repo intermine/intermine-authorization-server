@@ -24,8 +24,7 @@ public class Users implements Serializable {
         this.credentialsNonExpired = user.isCredentialsNonExpired();
         this.accountNonLocked = user.isAccountNonLocked();
         this.roles = user.getRoles();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
+        this.name = user.getName();
         this.userId = user.getUserId();
 
     }
@@ -48,10 +47,8 @@ public class Users implements Serializable {
     private boolean credentialsNonExpired;
     @Column(name = "accountNonLocked")
     private boolean accountNonLocked;
-    @Column(name = "First_Name", length = 36, nullable = true)
-    private String firstName;
-    @Column(name = "Last_Name", length = 36, nullable = true)
-    private String lastName;
+    @Column(name = "name", nullable = true)
+    private String name;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -139,19 +136,12 @@ public class Users implements Serializable {
         this.roles = roles;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 }

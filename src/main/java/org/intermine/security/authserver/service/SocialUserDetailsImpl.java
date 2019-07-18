@@ -66,8 +66,8 @@ public class SocialUserDetailsImpl implements SocialUserDetails {
         return true;
     }
 
-    public String getFirstName(){
-        return users.getFirstName();
+    public String getName(){
+        return users.getName();
     }
 
     public String getEmail(){

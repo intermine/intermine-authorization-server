@@ -106,8 +106,7 @@ public class AppUserDAO {
         users.setPassword(encrytedPassword);
         users.setUsername(userName);
         users.setEmail(email);
-        users.setFirstName(userProfile.getFirstName());
-        users.setLastName(userProfile.getLastName());
+        users.setName(userProfile.getFirstName());
         this.entityManager.persist(users);
         // Create default Role
         List<String> roleNames = new ArrayList<String>();
@@ -121,8 +120,7 @@ public class AppUserDAO {
         Users users = new Users();
         users.setUsername(appUserForm.getUserName());
         users.setEmail(appUserForm.getEmail());
-        users.setFirstName(appUserForm.getFirstName());
-        users.setLastName(appUserForm.getLastName());
+        users.setName(appUserForm.getName());
         users.setEnabled(true);
         String encrytedPassword = passwordEncoder().encode(appUserForm.getPassword());
         users.setPassword(encrytedPassword);
