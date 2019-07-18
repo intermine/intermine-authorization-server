@@ -33,35 +33,39 @@
                 <input type="hidden" th:field="*{signInProvider}" />
                 <div class="form-group">
                     <label for="firstName">First Name:</label>
-                    <input type="text" class="form-control" id="firstName" autofocus th:field="*{firstName}"><BR/>
+                    <input type="text" class="form-control" id="firstName" autofocus th:field="*{firstName}" required><BR/>
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="lastName">Last Name:</label>
-                    <input type="text" class="form-control" id="lastName" th:field="*{lastName}"><BR/>
+                    <input type="text" class="form-control" id="lastName" th:field="*{lastName}" required><BR/>
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="text" class="form-control" id="email" th:field="*{email}"><BR/>
+                    <input type="text" class="form-control" id="email" th:field="*{email}" required><BR/>
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="usernameTxt">Username:</label>
-                    <input type="text" class="form-control" id="usernameTxt" th:field="*{userName}"><BR/>
+                    <input type="text" class="form-control" id="usernameTxt" th:field="*{userName}" required><BR/>
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">..
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="pwd">Password:</label>
-                    <input type="password" class="form-control" id="pwd" th:field="*{password}"><BR/>
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" th:field="*{password}" required><BR/>
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">..
                     </div>
+                </div>
+                <div class="form-group">
+                <label for="confirm_password">Confirm Password:</label>
+                <input name="confirm_password" type="password" class="form-control" id="confirm_password" required><BR/>
                 </div>
                 <div class="d-flex justify-content-between mb-3">
                     <div class="p-2"><a href="/intermine/login"><button type="button" class="btn btn-secondary">Back</button></a></div>
@@ -75,4 +79,28 @@
     </div>
 </div>
 </body>
+<script>
+$('#password, #confirm_password').on('keyup', function () {
+  if ($('#password').val() == $('#confirm_password').val()) {
+      document.getElementById("confirm_password").style.borderColor="green";
+  } else
+      document.getElementById("confirm_password").style.borderColor="red";
+});
+
+
+var password = document.getElementById("password")
+  , confirm_password = document.getElementById("confirm_password");
+
+function validatePassword(){
+  if(password.value != confirm_password.value) {
+    confirm_password.setCustomValidity("Passwords Don't Match");
+  } else {
+    confirm_password.setCustomValidity('');
+  }
+}
+
+password.onchange = validatePassword;
+confirm_password.onkeyup = validatePassword;
+
+</script>
 </html>

@@ -28,9 +28,6 @@ public class ClientValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         ClientForm form = (ClientForm) target;
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "clientName", "", "Client name is required");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "websiteUrl", "", "website Url is required");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registeredRedirectUri", "", "Redirect Uri is required");
 
         if (errors.hasErrors()) {
             return;

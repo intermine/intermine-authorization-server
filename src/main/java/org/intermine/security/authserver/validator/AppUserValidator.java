@@ -29,12 +29,6 @@ public class AppUserValidator implements Validator {
 
         AppUserForm form = (AppUserForm) target;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "", "Email is required");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userName", "", "User name is required");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "", "First name is required");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "", "Last name is required");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "", "Password is required");
-
         if (errors.hasErrors()) {
             return;
         }

@@ -45,8 +45,8 @@
                         <input type="text" class="form-control" id="usernameTxt" autofocus name="username">
                     </div>
                     <div class="form-group">
-                        <label for="pwd">Password:</label>
-                        <input type="password" class="form-control" id="pwd" name="password"><br>
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" id="password" name="password"><br>
                         <input type="checkbox" onclick="myFunction()">  Show Password
                     </div>
                     <div class="d-flex justify-content-between mb-3">
@@ -64,7 +64,7 @@
 </body>
 <script>
     function myFunction() {
-        var x = document.getElementById("pwd");
+        var x = document.getElementById("password");
         if (x.type === "password") {
             x.type = "text";
         } else {
