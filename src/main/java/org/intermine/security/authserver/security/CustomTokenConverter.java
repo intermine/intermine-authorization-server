@@ -6,6 +6,12 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +23,11 @@ public class CustomTokenConverter extends JwtAccessTokenConverter {
         SocialUserDetailsImpl user = (SocialUserDetailsImpl) authentication.getPrincipal();
         additionalInfo.put("name", user.getFirstName());
         additionalInfo.put("email", user.getEmail());
-        additionalInfo.put("sub", user.getUserId());
+        try {
+            additionalInfo.put("sub", Encryption.EncryptAESCBCPCKS5Padding(user.getUserId()));
+        } catch (InvalidKeyException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
+            e.printStackTrace();
+        }
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
         accessToken = super.enhance(accessToken, authentication);
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(new HashMap<>());
