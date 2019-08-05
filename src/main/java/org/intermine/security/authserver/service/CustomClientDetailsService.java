@@ -42,7 +42,7 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
 
-        Optional<OauthClientDetails> oauthClientDetails = iOauthClientDetails.findByClientId(clientId);
+        Optional<OauthClientDetails> oauthClientDetails = Optional.ofNullable(iOauthClientDetails.findByClientId(clientId));
 
 
         if (!oauthClientDetails.isPresent()) {
