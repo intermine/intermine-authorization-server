@@ -97,28 +97,6 @@ public class MainController {
         return "welcomePage";
     }
 
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String adminPage(Model model, Principal principal) {
-        String userName = principal.getName();
-        System.out.println("User Name: " + userName);
-        UserDetails loginedUser = (UserDetails) ((Authentication) principal).getPrincipal();
-        String userInfo = WebUtils.toString(loginedUser);
-        model.addAttribute("userInfo", userInfo);
-        return "adminPage";
-    }
-
-
-    @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
-    public String userInfo(Model model, Principal principal) {
-        String userName = principal.getName();
-        System.out.println("User Name: " + userName);
-        UserDetails loginedUser = (UserDetails) ((Authentication) principal).getPrincipal();
-        String userInfo = WebUtils.toString(loginedUser);
-        model.addAttribute("userInfo", userInfo);
-        return "userInfoPage";
-    }
-
-
     @RequestMapping(value = "/user-info", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> currentUserName(HttpServletRequest request) throws IOException {
@@ -135,26 +113,6 @@ public class MainController {
         jsonObject.addProperty("sub",sub);
         return new ResponseEntity<>(jsonObject.toString(), HttpStatus.FOUND);
     }
-
-    @RequestMapping(value = "/403", method = RequestMethod.GET)
-    public String accessDenied(Model model, Principal principal) {
-
-        if (principal != null) {
-            UserDetails loginedUser = (UserDetails) ((Authentication) principal).getPrincipal();
-
-            String userInfo = WebUtils.toString(loginedUser);
-
-            model.addAttribute("userInfo", userInfo);
-
-            String message = "Hi " + principal.getName() //
-                    + "<br> You do not have permission to access this page!";
-            model.addAttribute("message", message);
-
-        }
-
-        return "403Page";
-    }
-
 
     @RequestMapping(value = { "/login" }, method = RequestMethod.GET)
     public String login(Model model, HttpServletRequest request, HttpServletResponse response)
@@ -183,41 +141,6 @@ public class MainController {
         model.addAttribute("myForm", myForm);
         return "signupPage";
     }
-
-    @RequestMapping(value = { "/clientRegistration" }, method = RequestMethod.GET)
-    public String clientRegistrationPage(WebRequest request, Model model) {
-        ClientForm myForm=null;
-        myForm = new ClientForm();
-        model.addAttribute("myForm", myForm);
-        return "clientRegistrationPage";
-    }
-
-    @RequestMapping(value = {"/clientRegistration"},method = RequestMethod.POST)
-    public String clientSave(Model model,
-                             @ModelAttribute("myForm") @Validated ClientForm clientForm,
-                             BindingResult result,
-                             Principal principal){
-        if(result.hasErrors()){return "clientRegistrationPage";}
-
-        try{
-            OauthClientDetails oauthClientDetails=new OauthClientDetails();
-            oauthClientDetails.setWebsiteUrl(clientForm.getWebsiteUrl());
-            oauthClientDetails.setClientName(clientForm.getClientName());
-            oauthClientDetails.setRegisteredRedirectUri(clientForm.getRegisteredRedirectUri());
-            oauthClientDetails.setClientType(clientForm.getClientType());
-            oauthClientDetails.setRegisteredBy(principal.getName());
-            HashMap<String, String> clientInfo=customClientDetailsService.addCustomClientDetails(oauthClientDetails);
-            model.addAttribute("clientId",clientInfo.get("client_id"));
-            model.addAttribute("clientSecret",clientInfo.get("client_secret"));
-
-        }
-        catch (Exception ex){ex.printStackTrace();
-            model.addAttribute("errorMessage", "Error " + ex.getMessage());
-            return "clientRegistrationPage";}
-
-        return "clientInfoPage";
-    }
-
 
     @RequestMapping(value = { "/signup" }, method = RequestMethod.POST)
     public String signupSave(WebRequest request, //
@@ -259,37 +182,4 @@ public class MainController {
         return null;
     }
 
-    @RequestMapping(value = "/registeredClients", method = RequestMethod.GET)
-    public String registeredClientsInfo(Model model, Principal principal) {
-        String userName = principal.getName();
-        System.out.println("User Name: " + userName);
-        List<OauthClientDetails> clientList=customClientDetailsService.loadClientByUsername(userName);
-        HashMap<OauthClientDetails, String> secretMap = new HashMap<>();
-        for (OauthClientDetails element : clientList) {
-            if(element.getClientSecret()!=null) {
-                String encodedSecret = element.getClientSecret();
-                try {
-                    String decodedSecret= Encryption.DecryptAESCBCPCKS5Padding(encodedSecret);
-                    secretMap.put(element,decodedSecret);
-                } catch (InvalidKeyException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        model.addAttribute("clientList", clientList);
-        model.addAttribute("secretMap",secretMap);
-        return "registeredClientsPage";
-    }
-
-    @RequestMapping(value={"/updateClient"},method=RequestMethod.POST,params = "update")
-    public String clientUpdate(@RequestParam(value="registeredRedirectUri",required=false) String redirecturi, @RequestParam(value = "ClientName",required = false) String clientName){
-        customClientDetailsService.updateClientRedirectUri(clientName,redirecturi);
-        return "redirect:/registeredClients";
-    }
-
-    @RequestMapping(value={"/updateClient"},method=RequestMethod.POST,params = "delete")
-    public String clientDelete(@RequestParam(value = "ClientName",required = false) String clientName){
-        customClientDetailsService.deleteClient(clientName);
-        return "redirect:/registeredClients";
-    }
 }
