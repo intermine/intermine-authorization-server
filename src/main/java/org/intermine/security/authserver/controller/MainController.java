@@ -91,23 +91,6 @@ public class MainController {
         return "welcomePage";
     }
 
-    @RequestMapping(value = "/user-info", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<?> currentUserName(HttpServletRequest request) throws IOException {
-        String token=request.getHeader("Authorization").split("Bearer ")[1];
-        ObjectMapper objectMapper = new ObjectMapper();
-        Jwt jwt = JwtHelper.decode(token);
-        Map claims = objectMapper.readValue(jwt.getClaims(), Map.class);
-        String name = (String) claims.get("name");
-        String email =(String) claims.get("email");
-        String sub = (String) claims.get("sub");
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("name",name);
-        jsonObject.addProperty("email",email);
-        jsonObject.addProperty("sub",sub);
-        return new ResponseEntity<>(jsonObject.toString(), HttpStatus.FOUND);
-    }
-
     @RequestMapping(value = { "/login" }, method = RequestMethod.GET)
     public String login(Model model, HttpServletRequest request, HttpServletResponse response)
     {
