@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Intermine </title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <link href="custom.css" rel="stylesheet">
+    <script>
+     $(document).ready(function(){
+        $('#modal1').modal();
+        $('#modal1').modal('open');
+     });
+    </script>
+</head>
+<body>
+
+<div class="container">
+
+<div class="row">
+<!-- Modal Trigger -->
+
+<div id="modal" class="modal">
+
+  <img src="https://intermineorg.files.wordpress.com/2017/02/squareish-white-bg-300px.png?w=300&h=&zoom=" width="20",height="20" align="left" />
+  <font color="#696969"><b> Sign in with Intermine </b> </font>
+<hr>
+    <div class="modal-content">
+
+<center>
+<font>If you already have account on <h5 style="color:#3474E0;"> <b><td th:text="${clientName}"></td></b> </h5> Please read below otherwise ignore and go with NO</font></center>
+<center><font><b>Do you want to merge your previous <td th:text="${clientName}"></td></td> account with this new IM account?</b></font></center>
+    </div>
+    <div class="modal-footer">
+<form id="confirmationForm" name="confirmationForm" action="/intermine/oauth/authorize" method="post">
+<input name="user_oauth_approval" value="true" type="hidden">
+<ul>
+<li><div class="form-group">scope.openid: <input type="radio" name="scope.openid" value="true" checked="">Approve</div></li>
+<li><div class="form-group">scope.email: <input type="radio" name="scope.email" value="true"  checked="">Approve</div></li>
+<li><div class="form-group">scope.profile: <input type="radio" name="scope.profile" value="true"  checked="">Approve</div></li>
+</ul>
+ <button style="float: left;" type="submit" id="nobutton" value="Authorize" name="authorize" class="btn btn-success">No</button>
+</form>
+
+<form id="confirmationForm" name="confirmationForm" action="/intermine/merge-request" method="post">
+<input name="user_oauth_approval" value="true" type="hidden">
+<ul>
+<li><div class="form-group">scope.openid: <input type="radio" name="scope.openid" value="true" checked="" >Approve</div></li>
+<li><div class="form-group">scope.email: <input type="radio" name="scope.email" value="true"  checked="">Approve</div></li>
+<li><div class="form-group">scope.profile: <input type="radio" name="scope.profile" value="true"  checked="">Approve</div></li>
+</ul>
+<button style="float: right;" type="submit" value="Authorize" name="merge" class="btn btn-warning">Yes</button>
+</form>
+    </div>
+</div>
+
+
+
+<!-- Modal 1 -->
+<div id="modal1"  class="modal">
+  <img src="https://intermineorg.files.wordpress.com/2017/02/squareish-white-bg-300px.png?w=300&h=&zoom=" width="20",height="20" align="left" />
+  <font color="#696969"><b> Sign in with Intermine </b> </font>
+<hr>
+    <div class="modal-content">
+<center>
+<font>Do you authorize<h5 style="color:#3474E0;"> <b><td th:text="${clientName}"></td></b> </h5> to access your Name and email?</font></center>
+    </div>
+    <div class="modal-footer">
+<form id="confirmationForm" name="confirmationForm" action="/intermine/oauth/authorize" method="post">
+<input name="user_oauth_approval" value="true" type="hidden">
+<ul>
+<li><div class="form-group">scope.openid: <input type="radio" name="scope.openid" value="true" >Approve</div></li>
+<li><div class="form-group">scope.email: <input type="radio" name="scope.email" value="true"  >Approve</div></li>
+<li><div class="form-group">scope.profile: <input type="radio" name="scope.profile" value="true" >Approve</div></li>
+</ul>
+ <button style="float: left;" type="submit" id="nobutton" value="Authorize" name="authorize" class="btn btn-danger">Deny</button>
+</form>
+<button style="float: right;"  onclick="modalonef()" class="btn btn-info">Allow</button>
+    </div>
+</div>
+</div>
+
+</div>
+</body>
+<style>
+.modal {
+  width: 500px ;
+  height: 400px;
+  margin: auto;
+}
+.form-group{
+  display:none;
+}
+.btn-success{
+        background: #5cb85c;;
+        }
+        .btn-danger{
+        background: #d9534f;
+        }
+        .btn-warning{
+        background: #f0ad4e;
+        }
+        .btn-info {
+            color: #fff;
+            background-color: #5bc0de;
+            border-color: #46b8da;
+        }
+.toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 20px; }
+  .toggle.ios .toggle-handle { border-radius: 20px; }
+</style>
+
+<script>
+function modalonef(){
+   $('#modal').modal();
+   $('#modal').modal('open');
+}
+</script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var merged = /*[[${merged}]]*/ 'default';
+    // console.log(message);
+    if(merged){
+        document.getElementById('nobutton').click()
+    }
+/*]]>*/
+</script>
+
+</html>
