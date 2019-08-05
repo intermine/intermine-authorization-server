@@ -21,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
@@ -35,6 +37,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -62,6 +65,8 @@ public class MainController {
 
     @Autowired
     private ClientValidator clientValidator;
+
+    private String oauthRedirectUri = null;
 
     @InitBinder
     protected void initBinder(WebDataBinder dataBinder) {
@@ -146,7 +151,10 @@ public class MainController {
 
 
     @RequestMapping(value = { "/login" }, method = RequestMethod.GET)
-    public String login(Model model) {
+    public String login(Model model, HttpServletRequest request, HttpServletResponse response)
+    {
+        SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
+        oauthRedirectUri = savedRequest.getRedirectUrl();
         return "loginPage";
     }
 
@@ -210,7 +218,8 @@ public class MainController {
                              Model model, //
                              @ModelAttribute("myForm") @Validated AppUserForm appUserForm, //
                              BindingResult result, //
-                             final RedirectAttributes redirectAttributes) {
+                             final RedirectAttributes redirectAttributes,
+                             HttpServletResponse response) throws IOException {
 
         // Validation error.
         if (result.hasErrors()) {
@@ -239,7 +248,9 @@ public class MainController {
 
         SecurityUtil.logInUser(registered, roleNames);
 
-        return "redirect:/userInfo";
+//        return "redirect:/userInfo";
+        response.sendRedirect(oauthRedirectUri);
+        return null;
     }
 
     @RequestMapping(value = "/registeredClients", method = RequestMethod.GET)
