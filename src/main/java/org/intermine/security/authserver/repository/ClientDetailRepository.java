@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ClientDetailRepository extends JpaRepository<OauthClientDetails, Integer> {
-    Optional<OauthClientDetails> findByClientId(String clientId);
+    OauthClientDetails findByClientId(String clientId);
     OauthClientDetails findByClientName(String clientName);
     OauthClientDetails findByWebsiteUrl(String websiteUrl);
     List<OauthClientDetails> findAllByRegisteredBy(String registeredBy);
