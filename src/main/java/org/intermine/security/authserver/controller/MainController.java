@@ -8,6 +8,7 @@ import org.intermine.security.authserver.form.ClientForm;
 import org.intermine.security.authserver.model.OauthClientDetails;
 import org.intermine.security.authserver.model.Role;
 import org.intermine.security.authserver.model.Users;
+import org.intermine.security.authserver.security.Encryption;
 import org.intermine.security.authserver.service.CustomClientDetailsService;
 import org.intermine.security.authserver.utils.SecurityUtil;
 import org.intermine.security.authserver.utils.WebUtils;
@@ -36,10 +37,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.*;
@@ -258,7 +264,20 @@ public class MainController {
         String userName = principal.getName();
         System.out.println("User Name: " + userName);
         List<OauthClientDetails> clientList=customClientDetailsService.loadClientByUsername(userName);
+        HashMap<OauthClientDetails, String> secretMap = new HashMap<>();
+        for (OauthClientDetails element : clientList) {
+            if(element.getClientSecret()!=null) {
+                String encodedSecret = element.getClientSecret();
+                try {
+                    String decodedSecret= Encryption.DecryptAESCBCPCKS5Padding(encodedSecret);
+                    secretMap.put(element,decodedSecret);
+                } catch (InvalidKeyException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         model.addAttribute("clientList", clientList);
+        model.addAttribute("secretMap",secretMap);
         return "registeredClientsPage";
     }
 
