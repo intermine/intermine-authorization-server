@@ -53,16 +53,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/", "/signup", "/login", "/logout").permitAll();
-        http.authorizeRequests().antMatchers("/userInfo").access("hasRole('" + Role.ROLE_USER + "')");
+        http.authorizeRequests().antMatchers("/user/userInfo").access("hasRole('" + Role.ROLE_USER + "')");
         http.authorizeRequests().antMatchers("/admin").access("hasRole('" + Role.ROLE_ADMIN + "')");
-        http.authorizeRequests().antMatchers("/clientRegistration","/registeredClients","/updateClient").access("hasRole('" + Role.ROLE_USER + "')");
-        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
+        http.authorizeRequests().antMatchers("/client/clientRegistration","/client/registeredClients","/client/updateClient").access("hasRole('" + Role.ROLE_USER + "')");
+        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/error/403");
         http.authorizeRequests()
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/j_spring_security_check")
                 .loginPage("/login")
-                .defaultSuccessUrl("/userInfo")
+                .defaultSuccessUrl("/user/userInfo")
                 .failureUrl("/login?error=true")
                 .usernameParameter("username")
                 .passwordParameter("password");
