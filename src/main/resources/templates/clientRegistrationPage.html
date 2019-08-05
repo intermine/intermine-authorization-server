@@ -20,12 +20,12 @@
         })
     </script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="custom.css">
+    <link rel="stylesheet" th:href="@{/custom.css}">
 </head>
 <body>
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
-        <img src="intermine.png" width="700" height="80" >
+        <img th:src="@{/intermine.png}" width="700" height="80" >
     </div>
 </div>
 <div class="container">
