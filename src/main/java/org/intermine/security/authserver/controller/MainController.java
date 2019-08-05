@@ -69,9 +69,6 @@ public class MainController {
     @Autowired
     private AppUserValidator appUserValidator;
 
-    @Autowired
-    private ClientValidator clientValidator;
-
     private String oauthRedirectUri = null;
 
     @InitBinder
@@ -85,9 +82,6 @@ public class MainController {
 
         if (target.getClass() == AppUserForm.class) {
             dataBinder.setValidator(appUserValidator);
-        }
-        else if(target.getClass()==ClientForm.class){
-            dataBinder.setValidator(clientValidator);
         }
     }
 
