@@ -11,6 +11,8 @@ public interface ClientDetailRepository extends JpaRepository<OauthClientDetails
     OauthClientDetails findByClientName(String clientName);
     OauthClientDetails findByWebsiteUrl(String websiteUrl);
     List<OauthClientDetails> findAllByRegisteredBy(String registeredBy);
+    List<OauthClientDetails> findAll();
+    Long countByStatus(boolean bool);
     void deleteByClientName(String clientName);
     @Override
     <S extends OauthClientDetails> S save(S s);

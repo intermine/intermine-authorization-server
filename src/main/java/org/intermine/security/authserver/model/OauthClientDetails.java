@@ -54,6 +54,8 @@ public class OauthClientDetails implements ClientDetails, Serializable {
     private String clientType;
     @Column(name = "registered_by")
     private String registeredBy;
+    @Column(name= "status")
+    private boolean status;
 
     public OauthClientDetails() {
 
@@ -245,5 +247,13 @@ public class OauthClientDetails implements ClientDetails, Serializable {
 
     public void setRegisteredBy(String registeredBy) {
         this.registeredBy = registeredBy;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }
