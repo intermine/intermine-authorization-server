@@ -81,10 +81,6 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
 
     public HashMap<String, String> addCustomClientDetails(OauthClientDetails clientDetails) throws ClientAlreadyExistsException, NoSuchAlgorithmException {
         OauthClientDetails oauthClientDetail = new OauthClientDetails();
-        String currentClientId = Encryption.SHA1(secureRandom(16).generateKey()) + ".apps.intermine.com";
-        oauthClientDetail.setClientId(currentClientId);
-        String currentClientSecret = Encryption.SHA1(secureRandom(16).generateKey());
-        oauthClientDetail.setClientSecret(passwordEncoder().encode(currentClientSecret));
         oauthClientDetail.setClientName(clientDetails.getClientName());
         oauthClientDetail.setRegisteredRedirectUri(clientDetails.getRegisteredRedirectUri());
         oauthClientDetail.setWebsiteUrl(clientDetails.getWebsiteUrl());
@@ -96,8 +92,6 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
         oauthClientDetail.setAuthorizedGrantTypes(new HashSet<String>(Arrays.asList("authorization_code", "password", "refresh_token", "implicit")));
         iOauthClientDetails.save(oauthClientDetail);
         HashMap<String, String> map = new HashMap<>();
-        map.put("client_id", currentClientId);
-        map.put("client_secret", currentClientSecret);
         return map;
     }
 
@@ -110,5 +104,15 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
 
     public void deleteClient(String clientName){
         iOauthClientDetails.deleteByClientName(clientName);
+    }
+
+    public void verifyClient(String clientName) throws NoSuchAlgorithmException {
+        OauthClientDetails oauthClientDetails = iOauthClientDetails.findByClientName(clientName);
+        String currentClientId = Encryption.SHA1(secureRandom(16).generateKey()) + ".apps.intermine.com";
+        oauthClientDetails.setClientId(currentClientId);
+        String currentClientSecret = Encryption.SHA1(secureRandom(16).generateKey());
+        oauthClientDetails.setClientSecret(passwordEncoder().encode(currentClientSecret));
+        oauthClientDetails.setStatus(true);
+        iOauthClientDetails.save(oauthClientDetails);
     }
 }
