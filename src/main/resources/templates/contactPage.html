@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet"  th:href="@{/css/contactPage.css}">
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<small>Enter message (optional) and click button "Send"</small>
+<div class="wrapper centered">
+  <article class="letter">
+    <div class="side">
+      <h1>Contact us</h1>
+      <p>
+        <textarea placeholder="Your message"></textarea>
+      </p>
+    </div>
+    <div class="side">
+      <p>
+        <input type="text" placeholder="Your name" required>
+      </p>
+      <p>
+        <input type="email" placeholder="Your email" required>
+      </p>
+      <p>
+        <button id="sendLetter">Send</button>
+      </p>
+    </div>
+  </article>
+  <div class="envelope front"></div>
+  <div class="envelope back"></div>
+</div>
+<p class="result-message centered">Thank you for your message</p>
+<br>
+<br>
+<br>
+<a href="/intermine"> <p class="result-message centered">  <button>Home</button> </p> </a>
+
+<!-- partial -->
+ <script type="text/javascript" src="/static/js/contactPage.js" th:src="@{/js/contactPage.js}"></script>
+
+</body>
+</html>

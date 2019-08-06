@@ -7,9 +7,9 @@ server:
         enabled: false
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/<your-database-name?createDatabaseIfNotExist=true
-    username: <your-username>
-    password: <your-password>
+    url: jdbc:postgresql://localhost:5432/oauthdb?createDatabaseIfNotExist=true
+    username: root
+    password: 1qazxsw2#
     driver-class-name: org.postgresql.Driver
     initialization-mode: always
   jpa:
