@@ -85,10 +85,18 @@ public class MainController {
         }
     }
 
-    @RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcomePage(Model model) {
-        model.addAttribute("message", "This is welcome page!");
-        return "welcomePage";
+        return "homePage";
+    }
+
+    @RequestMapping(value = {"/profile"}, method = RequestMethod.GET)
+    public String profile(Model model,Principal principal) {
+        String userName =principal.getName();
+        if(userName.equals("admin")){
+            return "redirect:/admin";
+        }
+        return "redirect:/user/userInfo";
     }
 
     @RequestMapping(value = { "/login" }, method = RequestMethod.GET)
@@ -157,6 +165,11 @@ public class MainController {
 //        return "redirect:/userInfo";
         response.sendRedirect(oauthRedirectUri);
         return null;
+    }
+
+    @RequestMapping(value = {"/contact"}, method = RequestMethod.GET)
+    public String contactPage(Model model) {
+        return "contactPage";
     }
 
 }

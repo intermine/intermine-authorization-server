@@ -52,10 +52,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/", "/signup", "/login", "/logout").permitAll();
+        http.authorizeRequests().antMatchers("/", "/signup", "/login", "/logout","/contact").permitAll();
         http.authorizeRequests().antMatchers("/user/userInfo").access("hasRole('" + Role.ROLE_USER + "')");
-        http.authorizeRequests().antMatchers("/admin").access("hasRole('" + Role.ROLE_ADMIN + "')");
-        http.authorizeRequests().antMatchers("/client/clientRegistration","/client/registeredClients","/client/updateClient").access("hasRole('" + Role.ROLE_USER + "')");
+        http.authorizeRequests().antMatchers("/profile").access("hasAnyRole('" + Role.ROLE_USER + "','" + Role.ROLE_ADMIN + "')");
+        http.authorizeRequests().antMatchers("/admin","/client/verifyClient").access("hasRole('" + Role.ROLE_ADMIN + "')");
+        http.authorizeRequests().antMatchers("/client/updateClient").access("hasRole('" + Role.ROLE_USER + "')");
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/error/403");
         http.authorizeRequests()
                 .and()
