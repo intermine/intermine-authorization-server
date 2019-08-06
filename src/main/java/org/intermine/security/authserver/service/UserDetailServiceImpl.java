@@ -3,6 +3,7 @@ package org.intermine.security.authserver.service;
 import org.intermine.security.authserver.dao.AppRoleDAO;
 import org.intermine.security.authserver.dao.AppUserDAO;
 import org.intermine.security.authserver.model.AuthUserDetail;
+import org.intermine.security.authserver.model.Role;
 import org.intermine.security.authserver.model.Users;
 import org.intermine.security.authserver.repository.UserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,17 +45,19 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         System.out.println("Found User: " + users);
 
-        List<String> roleNames = this.appRoleDAO.getRoleNames(users.getUserId());
+        List<Role> roleNames= users.getRoles();
 
         List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
+        List<String> rolesList=new ArrayList<>();
         if (roleNames != null) {
-            for (String role : roleNames) {
-                GrantedAuthority authority = new SimpleGrantedAuthority(role);
+            for (Role role : roleNames) {
+                GrantedAuthority authority = new SimpleGrantedAuthority(role.getName());
                 grantList.add(authority);
+                rolesList.add(role.getName());
             }
         }
 
-        SocialUserDetailsImpl userDetails = new SocialUserDetailsImpl(users, roleNames);
+        SocialUserDetailsImpl userDetails = new SocialUserDetailsImpl(users, rolesList);
 
         return userDetails;
 

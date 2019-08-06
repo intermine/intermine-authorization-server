@@ -21,20 +21,6 @@ public class AppRoleDAO {
     @Autowired
     private EntityManager entityManager;
 
-    @SuppressWarnings("unchecked")
-    public List<String> getRoleNames(Integer userId) {
-        //TODO Implement this function to return all the roles
-        /*
-        String sql = "Select role.name from role_user,role where user_id = :userId";
-        Query query = this.entityManager.createQuery(sql, String.class);
-        query.setParameter("userId", userId);
-        return query.getResultList();
-        */
-        ArrayList<String> list = new ArrayList<String>();
-        list.add("ROLE_USER");
-        return list;
-    }
-
     public Role findAppRoleByName(String roleName) {
         try {
             String sql = "Select e from " + Role.class.getName() + " e "
