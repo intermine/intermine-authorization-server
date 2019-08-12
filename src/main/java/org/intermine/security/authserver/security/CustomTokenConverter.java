@@ -23,6 +23,8 @@ public class CustomTokenConverter extends JwtAccessTokenConverter {
         SocialUserDetailsImpl user = (SocialUserDetailsImpl) authentication.getPrincipal();
         additionalInfo.put("name", user.getName());
         additionalInfo.put("email", user.getEmail());
+        String mergeProfileId=authentication.getOAuth2Request().getRequestParameters().get("mergeProfile");
+        additionalInfo.put("mergeProfileId",mergeProfileId);
         try {
             additionalInfo.put("sub", Encryption.EncryptAESCBCPCKS5Padding(user.getUserId()));
         } catch (InvalidKeyException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
