@@ -32,11 +32,14 @@ public class ClientValidator implements Validator {
         if (errors.hasErrors()) {
             return;
         }
-        if (!websiteValidator.isValid(form.getWebsiteUrl())) {
-
-            errors.rejectValue("websiteUrl", "", "Url is not valid");
-            return;
+        if(!form.getWebsiteUrl().startsWith("http://")){
+            errors.rejectValue("websiteUrl", "","Url is not valid");
         }
+//        if (!websiteValidator.isValid(form.getWebsiteUrl())) {
+//
+//            errors.rejectValue("websiteUrl", "", "Url is not valid");
+//            return;
+//        }
 
         OauthClientDetails oauthClientDetails = customClientDetailsService.loadClientByClientName(form.getClientName());
         if (oauthClientDetails != null) {
