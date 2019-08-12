@@ -22,9 +22,10 @@
     <div class="row">
         <div class="col-sm-1">
         </div>
-        <div class="col-sm-3">
+<!--
+        <div class="col-sm-3" >
             <div style="padding-top:12px;">
-                <a class="btn btn-block btn-social btn-google customBtn" th:href="@{/auth/google}">
+                <a   class="btn btn-block btn-social btn-google customBtn" th:href="@{/auth/google}">
                     <span class="fa fa-google width42px"></span> Sign in with Google
                 </a>
             </div>
@@ -33,13 +34,14 @@
         <div class="col-sm-1">
             <hr>
         </div>
-        <div class="col-sm-5">
+        -->
+        <div class="col-sm-7" >
             <div style="padding-top:15px;">
                 <!-- /login?error=true -->
                 <div class="alert alert-danger" th:if="${#request.getParameter('error') == 'true'}">
                     Invalid Username/Password
                 </div>
-                <form th:action="@{/j_spring_security_check}" method='POST'>
+                <form th:action="@{/j_spring_security_check}" method='POST' style="padding-left: 275px;">
                     <div class="form-group">
                         <label for="usernameTxt">Username:</label>
                         <input type="text" class="form-control" id="usernameTxt" autofocus name="username">
