@@ -55,16 +55,11 @@ public class OauthController {
         String clientName = oauthClientDetails.getClientName();
         model.put("auth_request", clientAuth);
         model.put("clientName", clientName);
-        boolean merged = false;
-        try {
-            UserClientTracker track = userClientTrackerRepository.findByClientNameAndAndUsername(clientName, username);
-            if (track == null) {
-                userClientTrackerRepository.save(new UserClientTracker(username, clientName, false));
-            }
-            merged = track.isMerged();
-        } catch (Exception e) {
+        boolean mergeRequest = false;
+        if(clientAuth.getRequestParameters().get("mergeProfile")!=null){
+            mergeRequest=true;
         }
-        model.put("merged", merged);
+        model.put("mergeRequest", mergeRequest);
 
         return new ModelAndView("confirmForm", model);
     }
@@ -72,17 +67,9 @@ public class OauthController {
 
     @PostMapping(value = {"/merge-request"}, params = "merge")
     public String merge(@ModelAttribute AuthorizationRequest clientAuth, Principal principal) {
-
-        String username = principal.getName();
-        Users user = userDetailRepository.findByUsername(username);
-        Integer sub = user.getUserId();
-        String encryptSub = null;
-        try {
-            encryptSub = Encryption.EncryptAESCBCPCKS5Padding(String.valueOf(sub));
-        } catch (InvalidKeyException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
-            e.printStackTrace();
-        }
-        return "redirect:http://localhost:8080/biotestmine/login.do?sub=" + encryptSub;
+        String clientId = clientAuth.getClientId();
+        OauthClientDetails oauthClientDetails = iOauthClientDetails.findByClientId(clientId);
+        return "redirect:http://localhost:8080/"+oauthClientDetails.getClientName()+"/login.do?merge=" + true;
 
     }
 
@@ -113,10 +100,14 @@ public class OauthController {
         String name = (String) claims.get("name");
         String email =(String) claims.get("email");
         String sub = (String) claims.get("sub");
+        String mergeProfileId = (String) claims.get("mergeProfileId");
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("name",name);
         jsonObject.addProperty("email",email);
         jsonObject.addProperty("sub",sub);
+        if(mergeProfileId!=null){
+            jsonObject.addProperty("mid",mergeProfileId);
+        }
         return new ResponseEntity<>(jsonObject.toString(), HttpStatus.FOUND);
     }
 
