@@ -5,9 +5,11 @@ import com.google.gson.JsonObject;
 import org.intermine.security.authserver.dao.AppUserDAO;
 import org.intermine.security.authserver.form.AppUserForm;
 import org.intermine.security.authserver.form.ClientForm;
+import org.intermine.security.authserver.model.AuthenticatedUser;
 import org.intermine.security.authserver.model.OauthClientDetails;
 import org.intermine.security.authserver.model.Role;
 import org.intermine.security.authserver.model.Users;
+import org.intermine.security.authserver.repository.AuthenticatedUserRepository;
 import org.intermine.security.authserver.security.Encryption;
 import org.intermine.security.authserver.service.CustomClientDetailsService;
 import org.intermine.security.authserver.utils.SecurityUtil;
@@ -68,6 +70,9 @@ public class MainController {
 
     @Autowired
     private AppUserValidator appUserValidator;
+
+    @Autowired
+    private AuthenticatedUserRepository authenticatedUserRepository;
 
     private String oauthRedirectUri = null;
 
@@ -174,6 +179,21 @@ public class MainController {
 //        return "redirect:/userInfo";
         response.sendRedirect(oauthRedirectUri);
         return null;
+    }
+
+    @RequestMapping(value = "/isLoggedIn", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean displayHomePage(Model model,HttpServletRequest request, Principal user) {
+        String clientId=request.getParameter("client");
+        try{
+            if(user!=null){
+                AuthenticatedUser track = authenticatedUserRepository.findByUsernameAndClientId(user.getName(),clientId);
+                return track != null;
+            }
+        }
+        catch (NullPointerException ignored){
+        }
+        return false;
     }
 
 }
