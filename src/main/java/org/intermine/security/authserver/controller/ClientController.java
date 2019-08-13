@@ -53,13 +53,13 @@ public class ClientController {
     @RequestMapping(value={"/updateClient"},method=RequestMethod.POST,params = "update")
     public String clientUpdate(@RequestParam(value="registeredRedirectUri",required=false) String redirecturi, @RequestParam(value = "ClientName",required = false) String clientName){
         customClientDetailsService.updateClientRedirectUri(clientName,redirecturi);
-        return "redirect:/registeredClients";
+        return "redirect:/user/userInfo";
     }
 
     @RequestMapping(value={"/updateClient"},method=RequestMethod.POST,params = "delete")
     public String clientDelete(@RequestParam(value = "ClientName",required = false) String clientName){
         customClientDetailsService.deleteClient(clientName);
-        return "redirect:/registeredClients";
+        return "redirect:/user/userInfo";
     }
 
     @RequestMapping(value = {"/verifyClient"}, method = RequestMethod.POST, params = "verify")
