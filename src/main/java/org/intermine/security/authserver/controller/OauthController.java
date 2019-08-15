@@ -67,10 +67,11 @@ public class OauthController {
 
     @PostMapping(value = {"/merge-request"}, params = "merge")
     public String merge(@ModelAttribute AuthorizationRequest clientAuth, Principal principal) {
-        String clientId = clientAuth.getClientId();
-        OauthClientDetails oauthClientDetails = iOauthClientDetails.findByClientId(clientId);
-        return "redirect:http://localhost:8080/"+oauthClientDetails.getClientName()+"/login.do?merge=" + true;
-
+        String mergeUrl=null;
+        if(clientAuth.getRequestParameters().get("mergeUrl")!=null){
+            mergeUrl=clientAuth.getRequestParameters().get("mergeUrl");
+        }
+        return "redirect:" + mergeUrl + "?merge=" + true;
     }
 
     @GetMapping("/account-status")
