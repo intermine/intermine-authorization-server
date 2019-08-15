@@ -79,6 +79,7 @@ public class UserController {
         }
         ClientForm myForm = null;
         myForm = new ClientForm();
+        model.addAttribute("username",userName);
         model.addAttribute("myForm", myForm);
         model.addAttribute("map",map);
         model.addAttribute("secretList",secretList);

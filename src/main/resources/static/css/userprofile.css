@@ -609,4 +609,8 @@ footer.sticky-footer {
     transition: all 0.3s linear;
 }
 
+.navbar-username{
+    padding-top: 8px;
+    color: white;
+}
 
