@@ -61,6 +61,12 @@
           </ul>
         </li>   -->
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                 <a class="nav-link" th:href="@{/user/changePassword}">
+                   <i class="fa fa-fw fa-wrench"></i>
+                   <span class="nav-link-text">Change Password</span>
+                 </a>
+               </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
           <a class="nav-link" href="/intermine/contact">
             <i class="fa fa-fw fa-link"></i>
             <span class="nav-link-text">Contact Us</span>
@@ -186,7 +192,6 @@
         </li>
         <li class="breadcrumb-item active">User Dashboard</li>
       </ol>
-
       <!-- Area Chart Example-->
 <br>
 <br>
@@ -449,6 +454,12 @@
        $('#myModal').modal();
        $('#myModal').modal('open');
     }
+
+    var changepasswordMessage = /*[[${changePasswordMessage}]]*/ 'default';
+    if(changepasswordMessage){
+       alert("Success! Your Password has been changed!")
+    }
+
 /*]]>*/
 </script>
 </html>

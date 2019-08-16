@@ -63,7 +63,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.cors();
         http.authorizeRequests().antMatchers("/", "/signup", "/login", "/logout", "/contact","/isLoggedIn").permitAll();
-        http.authorizeRequests().antMatchers("/user/userInfo").access("hasRole('" + Role.ROLE_USER + "')");
+        http.authorizeRequests().antMatchers("/user/userInfo","/user/changePassword").access("hasRole('" + Role.ROLE_USER + "')");
         http.authorizeRequests().antMatchers("/profile").access("hasAnyRole('" + Role.ROLE_USER + "','" + Role.ROLE_ADMIN + "')");
         http.authorizeRequests().antMatchers("/admin","/client/verifyClient").access("hasRole('" + Role.ROLE_ADMIN + "')");
         http.authorizeRequests().antMatchers("/client/updateClient").access("hasRole('" + Role.ROLE_USER + "')");

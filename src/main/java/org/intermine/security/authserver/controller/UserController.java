@@ -2,11 +2,16 @@ package org.intermine.security.authserver.controller;
 
 import org.intermine.security.authserver.form.ClientForm;
 import org.intermine.security.authserver.model.OauthClientDetails;
+import org.intermine.security.authserver.model.Users;
+import org.intermine.security.authserver.repository.UserDetailRepository;
+import org.intermine.security.authserver.security.CustomPasswordEncoder;
 import org.intermine.security.authserver.security.Encryption;
 import org.intermine.security.authserver.service.CustomClientDetailsService;
+import org.intermine.security.authserver.service.SocialUserDetailsImpl;
 import org.intermine.security.authserver.utils.WebUtils;
 import org.intermine.security.authserver.validator.ClientValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -14,14 +19,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.servlet.http.HttpServletRequest;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -39,6 +43,9 @@ public class UserController {
 
     @Autowired
     private ClientValidator clientValidator;
+
+    @Autowired
+    UserDetailRepository userDetailRepository;
 
     @InitBinder
     protected void initBinder(WebDataBinder dataBinder) {
@@ -116,5 +123,32 @@ public class UserController {
 
         model.addAttribute("clientRegistered",true);
         return "userProfile";
+    }
+
+    @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
+    public String getChangePasswordForm(Model model){
+
+        return "changePassword";
+    }
+
+    @RequestMapping(value = {"/changePassword"}, method = RequestMethod.POST)
+    public String changePassword(@RequestParam(value="currentpassword",required=true) String currentPass, @RequestParam(value = "newpassword",required = false) String newPass,
+                                 Principal principal, Model model, HttpServletRequest request, RedirectAttributes redirAttrs){
+        if(currentPass.equals(newPass)){
+            model.addAttribute("errorMessage", "Please enter different password.");
+            return "changePassword";
+        }
+        SocialUserDetailsImpl socialUserDetails=((SocialUserDetailsImpl)((UsernamePasswordAuthenticationToken)principal).getPrincipal());
+        String password=socialUserDetails.getPassword();
+        String username=principal.getName();
+        CustomPasswordEncoder passwordEncoder=new CustomPasswordEncoder();
+        boolean result = passwordEncoder.matches(currentPass,password);
+        if(!result){
+            model.addAttribute("errorMessage", "Wrong password");
+            return "changePassword";
+        }
+        userDetailRepository.updatePassword(passwordEncoder.encode(newPass),username);
+        redirAttrs.addFlashAttribute("changePasswordMessage", "success");
+        return "redirect:/user/userInfo";
     }
 }
