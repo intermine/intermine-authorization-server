@@ -84,10 +84,12 @@ public class UserController {
                 }
             }
         }
-        ClientForm myForm = null;
-        myForm = new ClientForm();
+        if(!model.containsAttribute("myForm")){
+            ClientForm myForm = null;
+            myForm = new ClientForm();
+            model.addAttribute("myForm", myForm);
+        }
         model.addAttribute("username",userName);
-        model.addAttribute("myForm", myForm);
         model.addAttribute("map",map);
         model.addAttribute("secretList",secretList);
         model.addAttribute("clientList", clientList);
@@ -101,6 +103,8 @@ public class UserController {
                              BindingResult result,
                              Principal principal) {
         if (result.hasErrors()) {
+            model.addAttribute("clientRegistrationError",true);
+            userInfo(model,principal);
             return "userProfile";
         }
 
