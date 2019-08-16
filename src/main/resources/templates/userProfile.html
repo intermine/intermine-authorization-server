@@ -200,11 +200,11 @@
                 <hr class="mt-2">
   <div class="container">
           	<ul class="collapsible">
-          		<li class="client-list">
+          		<li class="client-list" >
           			<div class="collapsible-header">Register Client
           				<i class="caret material-icons">keyboard_arrow_down</i>
           			</div>
-          			<div class="collapsible-body">
+          			<div class="collapsible-body" id="register-client-collapsible">
           			<div class="col-sm-3">
                                               <div class="row">
           			<form th:object="${myForm}" method="POST">
@@ -460,6 +460,11 @@
        alert("Success! Your Password has been changed!")
     }
 
+    var clientRegistrationError =  /*[[${clientRegistrationError}]]*/ 'default';
+    if(clientRegistrationError){
+            $('#register-client-collapsible').collapse("toggle");
+            window.location.hash="register-client"
+    }
 /*]]>*/
 </script>
 </html>
