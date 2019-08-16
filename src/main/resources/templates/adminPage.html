@@ -368,8 +368,8 @@
                             <tr>
                                <th>Name</th>
                                <th>Owner</th>
-                               <th>Type</th>
                                <th>Url</th>
+                               <th>Redirect Url</th>
                                <th>Status</th>
                             </tr>
                           </thead>
@@ -377,8 +377,8 @@
                             <tr>
                               <th>Name</th>
                               <th>Owner</th>
-                              <th>Type</th>
                               <th>Url</th>
+                              <th>Redirect Url</th>
                               <th>Status</th>
                             </tr>
                           </tfoot>
@@ -389,8 +389,8 @@
 
                                      <td th:text="${client.clientName}">...</td>
                                      <td th:text="${client.registeredBy}">...</td>
-                                     <td th:text="${client.clientType}">...</td>
                                      <td th:text="${client.websiteUrl}">...</td>
+                                     <td th:text="${client.registeredRedirectUri}">...</td>
                                      <td>
                                       <span th:if="${client.status} == false">
                                       <form  th:object="${verifyClient}" th:action="@{/client/verifyClient}" method="POST">
