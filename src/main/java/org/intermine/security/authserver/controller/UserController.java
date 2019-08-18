@@ -34,19 +34,42 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * User controller contains endpoint for userProfile
+ * template.
+ *
+ * @author Rahul Yadav
+ *
+ */
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
+    /**
+     * used to query oauth_client_detail table.
+     */
     @Autowired
     CustomClientDetailsService customClientDetailsService;
 
+    /**
+     * validator object for client registration form.
+     */
     @Autowired
     private ClientValidator clientValidator;
 
+    /**
+     * An object of jpa repository to query users table in database.
+     */
     @Autowired
     UserDetailRepository userDetailRepository;
 
+    /**
+     * <p>Setting client validator to clientform data on
+     * initialization.
+     * </p>
+     *
+     * @param dataBinder Binds client form data with validator
+     */
     @InitBinder
     protected void initBinder(WebDataBinder dataBinder) {
 
@@ -61,6 +84,16 @@ public class UserController {
         }
     }
 
+    /**
+     * <p>Get Mapping for /userInfo path. This method returns
+     * userProfile template with the required data in
+     * model attributes to render on template.
+     *  </p>
+     *
+     * @param model An Instance of Model class
+     * @param principal Current logged in user, can be obtained from SecurityContex too
+     * @return returns userProfile template
+     */
     @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
     public String userInfo(Model model, Principal principal) {
         String userName = principal.getName();
@@ -97,6 +130,17 @@ public class UserController {
         return "userProfile";
     }
 
+    /**
+     * <p>Post Mapping for /userInfo path. This method
+     * registers a new client in database if everything
+     * is right otherwise return userProfile page again
+     * with error attribute in model.
+     *  </p>
+     *
+     * @param model An Instance of Model class
+     * @param principal Current logged In  user
+     * @return userProfile template
+     */
     @RequestMapping(value = {"/userInfo"}, method = RequestMethod.POST)
     public String clientSave(Model model,
                              @ModelAttribute("myForm") @Validated ClientForm clientForm,
@@ -129,12 +173,34 @@ public class UserController {
         return "userProfile";
     }
 
+    /**
+     * <p>Get Mapping for /changePassword path. This method returns
+     * changePassword template.
+     *  </p>
+     *
+     * @param model An Instance of Model class
+     * @return returns changePassword template
+     */
     @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
     public String getChangePasswordForm(Model model){
 
         return "changePassword";
     }
 
+    /**
+     * <p>Post Mapping for /changePassword path. This method
+     * updates current logged in user password with the new one.
+     * First checks whether user enters correct current password
+     * or not if it is correct then update it in database.
+     *  </p>
+     *
+     * @param currentPass Current password enter by user in changePassword form
+     * @param newPass New password to be updated
+     * @param model An Instance of Model class
+     * @param principal Current logged In  user
+     * @return redirect user back to user dashboard if successful otherwise
+     * returns back to changePassword template if have any error occurred
+     */
     @RequestMapping(value = {"/changePassword"}, method = RequestMethod.POST)
     public String changePassword(@RequestParam(value="currentpassword",required=true) String currentPass, @RequestParam(value = "newpassword",required = false) String newPass,
                                  Principal principal, Model model, HttpServletRequest request, RedirectAttributes redirAttrs){

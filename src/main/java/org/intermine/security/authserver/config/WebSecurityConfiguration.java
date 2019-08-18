@@ -23,41 +23,104 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+/**
+ * This class handles the http security and Cors(cross origin resource sharing) configurations.
+ * Also, sets the custom properties in default methods of WebSecurityConfigurerAdapter.
+ *
+ * @author Rahul Yadav
+ *
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    /**
+     * An object of spring default UserDetailsService class.This object is used by
+     * AuthenticationManagerBuilder class to create an authentication manager.
+     */
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /**
+     * An object of jpa repository to query oauth_client_details table in database.
+     */
     @Autowired
     private ClientDetailRepository iOauthClientDetails;
 
+    /**
+     * <p>Configures the setting globally for AuthenticationManagerBuilder, which is a
+     * SecurityBuilder used to create an AuthenticationManager. Allows for easily
+     * building in memory authentication, LDAP authentication, JDBC based authentication,
+     * adding UserDetailsService, and adding AuthenticationProvider's.
+     *  </p>
+     *
+     * @param auth An Instance of AuthenticationManagerBuilder
+     */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
     }
 
+    /**
+     * <p>Returns the authenticationManager, whose job is to
+     * establish a user's identity. An authentication manager is defined by the
+     * AuthenticationManager interface.
+     *  </p>
+     *
+     * @return authenticationManager An Instance of AuthenticationManager.
+     */
     @Bean
     protected AuthenticationManager getAuthenticationManager() throws Exception {
         return super.authenticationManager();
     }
 
+    /**
+     * <p>CustomPasswordEncoder is used to encode and match the encoded
+     * credentials of client and user.
+     * </p>
+     *
+     * @return A new instance of CustomPasswordEncoder class
+     */
     @Bean
     PasswordEncoder passwordEncoder() {
         return new CustomPasswordEncoder();
     }
 
+    /**
+     * <p>Configures the setting for AuthenticationManagerBuilder, which is a
+     * SecurityBuilder used to create an AuthenticationManager. Allows for easily
+     * building in memory authentication, LDAP authentication, JDBC based authentication,
+     * adding UserDetailsService, and adding AuthenticationProvider's.
+     *  </p>
+     *
+     * @param auth An Instance of AuthenticationManagerBuilder
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    /**
+     * <p>Spring default USerDetailsService used to load the user by username.
+     * </p>
+     *
+     * @return An instance of spring default UserDetailsService class.
+     */
     @Override
     public UserDetailsService userDetailsService() {
         return userDetailsService;
     }
 
+    /**
+     * <p>This method helps in configuring custom http security restrictions.
+     * We can disable/enable default csrf security, allow cors and also can
+     * add role based restrictions on our rest endpoints.
+     * Also, we can set our own login process by setting login url,
+     * defaultSuccessUrl, logout url and etc.
+     *  </p>
+     *
+     * @param http An Instance of HttpSecurity
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
@@ -83,6 +146,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     }
 
+    /**
+     * <p>This method is adding website url of all the registered clients in
+     * allowed origins list so that every client can make a cross domain
+     * request on this authorization server.
+     * This helps in achieving cross domain SSo.
+     * </p>
+     *
+     * @return An instance of UrlBasedCorsConfigurationSource class.
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

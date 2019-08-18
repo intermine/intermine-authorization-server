@@ -24,21 +24,56 @@ import java.util.stream.Collectors;
 
 import static org.springframework.security.crypto.keygen.KeyGenerators.secureRandom;
 
+/**
+ * This class extends spring default oauth2 client details
+ * service and overrides the default methods according
+ * to Intermine Authorization server requirements.
+ *
+ *
+ * @author Rahul Yadav
+ *
+ */
 @Service
 public class CustomClientDetailsService extends JdbcClientDetailsService {
     private static final org.slf4j.Logger Logger = LoggerFactory.getLogger(CustomClientDetailsService.class);
 
+    /**
+     * An object of jpa repository to query oauth_client_details table in database.
+     */
     @Autowired
     private ClientDetailRepository iOauthClientDetails;
 
+    /**
+     * <p>This is used for the dynamic client registration
+     * purpose. Datasource is used to obtain database connections
+     * without knowing about the connection details.
+     *  </p>
+     *
+     * @param dataSource Object of DataSource
+     */
     public CustomClientDetailsService(DataSource dataSource) {
         super(dataSource);
     }
 
+    /**
+     * <p>Return an instance of custom password encoder
+     * to encode client credentials.
+     * </p>
+     *
+     * @return A new instance of CustomPasswordEncoder
+     */
     private PasswordEncoder passwordEncoder() {
         return new CustomPasswordEncoder();
     }
 
+    /**
+     * <p>This method load a client from the database
+     * using unique clientId of the client.
+     * </p>
+     *
+     * @param clientId unique ClientId of client
+     * @return An instance of Spring default ClientDetails
+     */
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
 
@@ -64,21 +99,52 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
         return new BaseClientDetails(client);
     }
 
+    /**
+     * <p>This method load a client from the database
+     * using name of the client.
+     * </p>
+     *
+     * @param clientName Name of the client
+     * @return Object of OauthClientDetails model class
+     */
     public OauthClientDetails loadClientByClientName(String clientName) {
         OauthClientDetails oauthClientDetails = iOauthClientDetails.findByClientName(clientName);
         return oauthClientDetails;
     }
 
+    /**
+     * <p>This method load a client from the database
+     * using unique website url of the client.
+     * </p>
+     *
+     * @param websiteUrl Unique website url of the client
+     * @return Object of OauthClientDetails model class
+     */
     public OauthClientDetails loadClientByWebsiteUrl(String websiteUrl) {
         OauthClientDetails oauthClientDetails = iOauthClientDetails.findByWebsiteUrl(websiteUrl);
         return oauthClientDetails;
     }
 
+    /**
+     * <p>This method loads a list of clients which are registered
+     * by a particular user.
+     * </p>
+     *
+     * @param registeredBy owner of the clients
+     * @return List of OauthClientDetails model objects
+     */
     public List<OauthClientDetails> loadClientByUsername(String registeredBy) {
         List<OauthClientDetails> oauthClientDetails = iOauthClientDetails.findAllByRegisteredBy(registeredBy);
         return oauthClientDetails;
     }
 
+
+    /**
+     * <p>This method saves a new client in the table.
+     * </p>
+     *
+     * @param clientDetails details of the client in the object
+     */
     public HashMap<String, String> addCustomClientDetails(OauthClientDetails clientDetails) throws ClientAlreadyExistsException, NoSuchAlgorithmException {
         OauthClientDetails oauthClientDetail = new OauthClientDetails();
         oauthClientDetail.setClientName(clientDetails.getClientName());
@@ -95,6 +161,14 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
         return map;
     }
 
+
+    /**
+     * <p>This method updates client redirect uri on user request.
+     * </p>
+     *
+     * @param clientName The client whose redirect Uri is to update
+     * @param redirectUri new redirect uri to update
+     */
     public void updateClientRedirectUri(String clientName, String redirectUri) throws NoSuchClientException {
         OauthClientDetails oauthClientDetails = iOauthClientDetails.findByClientName(clientName);
         String tesss = redirectUri.substring(1, redirectUri.length() - 1);
@@ -102,10 +176,27 @@ public class CustomClientDetailsService extends JdbcClientDetailsService {
         iOauthClientDetails.save(oauthClientDetails);
     }
 
+
+    /**
+     * <p>This method deletes a client from the database on the
+     * client owner request.
+     * </p>
+     *
+     * @param clientName name of the client to be delete
+     */
     public void deleteClient(String clientName){
         iOauthClientDetails.deleteByClientName(clientName);
     }
 
+
+    /**
+     * <p>This method verifies a client on admin request
+     * and generates required credentials for client and
+     * save them in client details.
+     * </p>
+     *
+     * @param clientName name of the client to be verify
+     */
     public void verifyClient(String clientName) throws NoSuchAlgorithmException {
         OauthClientDetails oauthClientDetails = iOauthClientDetails.findByClientName(clientName);
         String currentClientId = Encryption.SHA1(secureRandom(16).generateKey()) + ".apps.intermine.com";

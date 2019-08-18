@@ -11,20 +11,48 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+/**
+ * ClientValidator is used to validate client registration
+ * form data.
+ *
+ * @author Rahul Yadav
+ *
+ */
 @Component
 public class ClientValidator implements Validator {
 
+    /**
+     * Url validator to validate client website url.
+     */
     private UrlValidator websiteValidator=UrlValidator.getInstance();
 
+    /**
+     * used to query oauth_client_detail table.
+     */
     @Autowired
     private CustomClientDetailsService customClientDetailsService;
 
+    /**
+     * <p>Checks current class target is of clientForm or not.
+     *  </p>
+     *
+     * @return boolean true if equals
+     */
     @Override
     public boolean supports(Class<?> clazz) {
         return clazz == ClientForm.class;
     }
 
-
+    /**
+     * <p>Validate form data from target with some custom checks.
+     * Checks whether client is already registered or not ,website url
+     * is already registered by another user or not, is website url
+     * is in correct format or not.
+     *  </p>
+     *
+     * @param target Client registration form data
+     * @param errors rejects if error occurred in validation
+     */
     @Override
     public void validate(Object target, Errors errors) {
         ClientForm form = (ClientForm) target;

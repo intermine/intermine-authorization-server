@@ -52,30 +52,67 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.*;
 
+/**
+ * Main controller contains mainly those endpoints which
+ * anyone can access without having any specific role.
+ *
+ * @author Rahul Yadav
+ *
+ */
 @Controller
 @Transactional
 public class MainController {
 
+    /**
+     * used to query oauth_client_detail table.
+     */
     @Autowired
     CustomClientDetailsService customClientDetailsService;
 
+    /**
+     * Used to query users database.
+     */
     @Autowired
     private AppUserDAO appUserDAO;
 
+    /**
+     * The connection factory registry implements the ConnectionFactoryLocator
+     * interface.Below is an object of that.
+     */
     @Autowired
     private ConnectionFactoryLocator connectionFactoryLocator;
 
+    /**
+     * Use to query userconnection table in database.
+     */
     @Autowired
     private UsersConnectionRepository connectionRepository;
 
+    /**
+     * AppUserValidator is a validator of user signup form and
+     * below is an object of that.
+     */
     @Autowired
     private AppUserValidator appUserValidator;
 
+    /**
+     * Used to query oauth_access_token table in database.
+     */
     @Autowired
     private AuthenticatedUserRepository authenticatedUserRepository;
 
+    /**
+     * String variable to redirect back to previous request.
+     */
     private String oauthRedirectUri = null;
 
+    /**
+     * <p>Setting AppUSer validator to AppUserForm data on
+     * initialization.
+     * </p>
+     *
+     * @param dataBinder Binds app user form data with validator
+     */
     @InitBinder
     protected void initBinder(WebDataBinder dataBinder) {
 
@@ -90,11 +127,28 @@ public class MainController {
         }
     }
 
+    /**
+     * <p>Get Mapping for welcome page of authorization server.
+     *  </p>
+     *
+     * @return homePage template
+     */
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcomePage(Model model) {
         return "homePage";
     }
 
+    /**
+     * <p>Get Mapping for /profile path. This method redirect user
+     * to user dashboard if it's a normal user of authorization
+     * server otherwise redirect to admin page if it's an admin
+     * user.
+     *  </p>
+     *
+     * @param model An Instance of Model class
+     * @param principal Current logged in user, can be obtained from SecurityContex too
+     * @return redirect to admin or user dashboard
+     */
     @RequestMapping(value = {"/profile"}, method = RequestMethod.GET)
     public String profile(Model model,Principal principal) {
         String userName =principal.getName();
@@ -104,6 +158,18 @@ public class MainController {
         return "redirect:/user/userInfo";
     }
 
+    /**
+     * <p>Get Mapping for /login path. This method returns loginPage
+     * template. Storing session request cache so that if user clicks
+     * on create new account in between oauth flow then go back to it
+     * after successful registration.
+     *  </p>
+     *
+     * @param model An Instance of Model class
+     * @param request An Instance HttpServletRequest
+     * @param response An Instance HttpServletResponse
+     * @return loginPage template
+     */
     @RequestMapping(value = { "/login" }, method = RequestMethod.GET)
     public String login(Model model, HttpServletRequest request, HttpServletResponse response)
     {
@@ -112,11 +178,28 @@ public class MainController {
         return "loginPage";
     }
 
+    /**
+     * <p>Get Mapping for /signin path. This method redirect
+     * user to login path.
+     *  </p>
+     *
+     * @param model An Instance of Model class
+     * @return redirects to login path
+     */
     @RequestMapping(value = { "/signin" }, method = RequestMethod.GET)
     public String signInPage(Model model) {
         return "redirect:/login";
     }
 
+    /**
+     * <p>Get Mapping for /signup path. This method returns signup
+     * form template for user with blank clientForm instance.
+     * </p>
+     *
+     * @param model An Instance of Model class
+     * @param request Instance of webRequest
+     * @return signupPage template
+     */
     @RequestMapping(value = { "/signup" }, method = RequestMethod.GET)
     public String signupPage(WebRequest request, Model model) {
         ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils(connectionFactoryLocator,
@@ -132,6 +215,20 @@ public class MainController {
         return "signupPage";
     }
 
+    /**
+     * <p>Post Mapping for /signup path. This method first checks
+     * the user form information with the help of validator and then
+     * make use of bindingresult, which will give error if there
+     * is any in form otherwise extract the details from signup form,
+     * store them in database and logged in the user.
+     * </p>
+     *
+     * @param request Instance of webRequest
+     * @param model An Instance of Model class
+     * @param response Instance of HrrpServletResponse
+     *
+     * @return signupPage template
+     */
     @RequestMapping(value = { "/signup" }, method = RequestMethod.POST)
     public String signupSave(WebRequest request, //
                              Model model, //
@@ -173,14 +270,36 @@ public class MainController {
     }
 
 
+    /**
+     * <p>Get Mapping for /contact path. This method returns
+     * contactPage template.
+     * </p>
+     *
+     * @param model An Instance of Model class
+     * @return contactPage template
+     */
     @RequestMapping(value = {"/contact"}, method = RequestMethod.GET)
     public String contactPage(Model model) {
         return "contactPage";
     }
 
+    /**
+     * <p>Get Mapping for /isLoggedIn path. This endpoint
+     * is used in cross-domain sso. Any Client can make request
+     * on this endpoint which will first check that whether user
+     * is already logged in the browser from which client is making
+     * request and then also checks whether that user is already
+     * authenticated with the client or not.
+     * </p>
+     *
+     * @param model An Instance of Model class
+     * @param request HttpServletRequest instance
+     * @param user Current logged in user
+     * @return true if both checks true otherwise false
+     */
     @RequestMapping(value = "/isLoggedIn", method = RequestMethod.GET)
     @ResponseBody
-    public boolean displayHomePage(Model model,HttpServletRequest request, Principal user) {
+    public boolean isLoggedIn(Model model, HttpServletRequest request, Principal user) {
         String clientId=request.getParameter("client");
         try{
             if(user!=null){

@@ -9,7 +9,23 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * This class implements the default passwordEncoder of Spring security.
+ * CustomPasswordEncoder encodes and matches the raw password with
+ * the help of encryption methods in Encryption class.
+ *
+ * @author Rahul Yadav
+ *
+ */
 public class CustomPasswordEncoder implements PasswordEncoder {
+
+    /**
+     * <p>This method encodes the raw password using AES algorithm.
+     * </p>
+     *
+     * @param rawPassword password to encode
+     * @return hashed password
+     */
     @Override
     public String encode(CharSequence rawPassword) {
 
@@ -25,6 +41,14 @@ public class CustomPasswordEncoder implements PasswordEncoder {
         return hashed;
     }
 
+    /**
+     * <p>This method matches raw password and encoded password.
+     * </p>
+     *
+     * @param rawPassword raw password
+     * @param encodedPassword encoded password
+     * @return boolean true if matches else false
+     */
     @Override
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
 

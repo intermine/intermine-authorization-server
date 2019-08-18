@@ -7,8 +7,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+/**
+ * Utility class to convert UserDetails object into String.
+ *
+ * @author Rahul Yadav
+ *
+ */
 public class WebUtils {
 
+    /**
+     * <p>Converts spring default UserDetails obj
+     * in to string.
+     * </p>
+     *
+     * @param user UserDetails object
+     * @return sb A string builder instance
+     */
     public static String toString(UserDetails user) {
         StringBuilder sb = new StringBuilder();
 

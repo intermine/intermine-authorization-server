@@ -32,20 +32,55 @@ import java.security.Principal;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Oauth controller contains endpoints which are
+ * accessed during Oauth flow.
+ *
+ * @author Rahul Yadav
+ *
+ */
 @Controller
 @SessionAttributes(types = AuthorizationRequest.class)
 public class OauthController {
+
+    /**
+     * An object of jpa repository to query users table in database.
+     */
     @Autowired
     UserDetailRepository userDetailRepository;
 
+    /**
+     * An object of jpa repository to query oauth_client_details table in database.
+     */
     @Autowired
     private ClientDetailRepository iOauthClientDetails;
 
+    /**
+     * An object of jpa repository to query userclienttracker table in database.
+     */
     @Autowired
     private UserClientTrackerRepository userClientTrackerRepository;
 
+    /**
+     * Object of spring default clietdetailservice.
+     */
     private ClientDetailsService clientDetailsService;
 
+    /**
+     * <p>Mapping for /oauth/confirm_access path.This end point
+     * is used by default spring oauth2 security, /oauth/authorize
+     * end point calls this path to get permission from user to
+     * authorize client to access information like name and email.
+     *This method returns user confirmForm template which has two
+     * pop ups to get permission from user to merge previous
+     * account of mine if have any and to authorize client to access
+     * name and email.
+     * </p>
+     *
+     * @param clientAuth An authorization request form client
+     * @param principal Current logged in user
+     * @return confirmForm template with some attributes in model
+     */
     @RequestMapping("/oauth/confirm_access")
     public ModelAndView getAccessConfirmation(@ModelAttribute AuthorizationRequest clientAuth, Principal principal) {
         String username = principal.getName();
@@ -65,6 +100,17 @@ public class OauthController {
     }
 
 
+    /**
+     * <p>Mapping for /merge-request path. This end point is called
+     * when users taps on Yes to merge his/her previous account of mine
+     * and redirect user to login page of mine with merge parameter
+     * as true.
+     * </p>
+     *
+     * @param clientAuth An authorization request form client
+     * @param principal Current logged in user
+     * @return redirect to login page of mine
+     */
     @PostMapping(value = {"/merge-request"}, params = "merge")
     public String merge(@ModelAttribute AuthorizationRequest clientAuth, Principal principal) {
         String mergeUrl=null;
@@ -74,6 +120,16 @@ public class OauthController {
         return "redirect:" + mergeUrl + "?merge=" + true;
     }
 
+    /**
+     * <p>Mapping for /account-status path. This method can be used
+     * to update user client tracker table if user is successfully merged
+     * his/her previous mine account with this new IM account.
+     * </p>
+     *
+     * @param sub unique id of IM user who merged with mine account
+     * @param clientId Id of client which is making request
+     * @return ok httpstatus in responseEntity
+     */
     @GetMapping("/account-status")
     @ResponseBody
     public ResponseEntity<?> updateAccountStatus(@RequestParam String sub, String clientId) {
@@ -91,9 +147,19 @@ public class OauthController {
 
     }
 
+    /**
+     * <p>Get Mapping for /user-info path. This endpoint is used to
+     * return user info like name and email back to client after
+     * successful oauth2 authorization. This method decodes the JWT
+     * token from header and send back the details to client.
+     * </p>
+     *
+     * @param request HttpServletRequest instance
+     * @return Json object of user details.
+     */
     @RequestMapping(value = "/user-info", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> currentUserName(HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> getUserInfo(HttpServletRequest request) throws IOException {
         String token=request.getHeader("Authorization").split("Bearer ")[1];
         ObjectMapper objectMapper = new ObjectMapper();
         Jwt jwt = JwtHelper.decode(token);
@@ -112,6 +178,13 @@ public class OauthController {
         return new ResponseEntity<>(jsonObject.toString(), HttpStatus.FOUND);
     }
 
+    /**
+     * <p>This method set clientdetailservice during Oauth flow.
+     * i.e used when accessing /oauth/confirm_access path.
+     * </p>
+     *
+     * @param clientDetailsService Instance of default ClientDetailsService of spring security
+     */
     @Autowired
     public void setClientDetailsService(ClientDetailsService clientDetailsService) {
         this.clientDetailsService = clientDetailsService;
