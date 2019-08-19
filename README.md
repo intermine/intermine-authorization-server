@@ -4,7 +4,7 @@
      title="Intermine Logo" width="170" height="150">
 
 
-This is an InterMine Authorization Server built with Spring Boot 2.x OAuth2 which allows to access all 30 mines instance using a single account.
+This is an InterMine Authorization Server built with Spring Boot 2.x OAuth2 which allows to access all 30 InterMine instances using a single account.
 
 
 
