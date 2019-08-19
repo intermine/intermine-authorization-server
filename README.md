@@ -107,7 +107,7 @@ INSERT INTO role_user(row_id, id, user_id) VALUES (2, 1, 2);
 Open http://localhost:8282/intermine in any web browser. You will be redirected to home page of authorization server from where you can choose profile from the menu bar. Once you open your profile you will be redirected to login screen page and can create a new account on this IM auth server.
 
 <p align="center">
-  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/login_screen.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/login_screen.png" alt="Intermine Login" width="500">
 </p>
 
 2. User Dashboard
@@ -115,7 +115,7 @@ Open http://localhost:8282/intermine in any web browser. You will be redirected 
 Once you logged in successfully then will be redirected to your dashboard from where you can manage all your client and your profile. You can register a new client or can also manage your already registered clients. From dashboard you can also change your account password.
 
 <p align="center">
-  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/user_dashboard.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/user_dashboard.png" alt="Intermine Login" width="500">
 </p>
 
 3. Register a new client
@@ -123,7 +123,7 @@ Once you logged in successfully then will be redirected to your dashboard from w
 Only those user can register a client on InterMine auth server which are having account on it. Click on the register client bar from your dashboard and fill up the client registration form with some basic required information
 
 <p align="center">
-  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/client_registration.png" alt="Intermine Login" width="250" height="400">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/client_registration.png" alt="Intermine Login" width="250" height="400">
 </p>
 
 You will get your client id and secret once InterMine admin verify it.
@@ -140,7 +140,7 @@ Here are some features of admin dashboard:
 Verify any registered client with a simple click on verify button
 
 <p align="center">
-  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/admin_verify.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/admin_verify.png" alt="Intermine Login" width="500">
 </p>
 
 5. Client Management
@@ -148,7 +148,7 @@ Verify any registered client with a simple click on verify button
 User can manage registered client and access their credentials too from dashboard and is also able to update & delete the clients.
 
 <p align="center">
-  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/client_management.png" alt="Intermine Login" width="250" height="400">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/client_management.png" alt="Intermine Login" width="250" height="400">
 </p>
 
 ### B. Configuring IM Auth Server On client/Mine
@@ -173,7 +173,7 @@ That's all!!! Deploy your mine and then anyone can login in your mine with IM au
 2. You can choose IM from the dropdown to login with IM account
 
 <p align="center">
-  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/login_with_mine.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/login_with_mine.png" alt="Intermine Login" width="500">
 </p>
 
 3. Migration
@@ -181,7 +181,7 @@ That's all!!! Deploy your mine and then anyone can login in your mine with IM au
 Once you logged in first time on any mine with the IM account, will be redirected to a merge pop up where you will be asked to merge your previous account of mine if have any otherwise can go with No.
 
 <p align="center">
-  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/merge_popup.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/merge_popup.png" alt="Intermine Login" width="500">
 </p>
 
 
@@ -189,14 +189,14 @@ i. If you don't have any previous account you can go with NO. Once you taps on N
 If you allow it then you will be successfully logged in to the mine otherwise deny will not logged you in to mine
 
 <p align="center">
-  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/authorize_popup.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/authorize_popup.png" alt="Intermine Login" width="500">
 </p>
 
 
 ii. If you want to merge your pervious mine account with this new IM account then tap on YES and you will be redirected to merge form page of mine.
 
 <p align="center">
-  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/merge_form.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/merge_form.png" alt="Intermine Login" width="500">
 </p>
 
 Enter your old mine account credentials and click on the merge account. Once you click on it then you will redirected back to IM auth server page where you will be asked to give access of your name and email to the mine. If you allow it then you will be successfully logged in to the mine otherwise deny will not logged you in to mine
