@@ -23,16 +23,39 @@ import java.util.List;
 
 import static org.springframework.security.crypto.keygen.KeyGenerators.secureRandom;
 
+/**
+ * Data access object class having access to database and
+ * contains logic to access data from users table.
+ *
+ * @author Rahul Yadav
+ *
+ */
 @Repository
 @Transactional
 public class AppUserDAO {
 
+    /**
+     * Used to read, delete and write an entity.
+     * An object referenced by an entity is managed
+     * by entity manager.
+     */
     @Autowired
     private EntityManager entityManager;
 
+    /**
+     * An object of AppRoleDAO class used to create role
+     * for user.
+     */
     @Autowired
     private AppRoleDAO appRoleDAO;
 
+    /**
+     * <p>Find user by user unique id.
+     * </p>
+     *
+     * @param userId unique id of user
+     * @return Object of Users model class
+     */
     public Users findAppUserByUserId(Long userId) {
         try {
             String sql = "select e from " + Users.class.getName() + " e where e.user_id = :userId ";
@@ -44,6 +67,13 @@ public class AppUserDAO {
         }
     }
 
+    /**
+     * <p>Find user by username.
+     * </p>
+     *
+     * @param userName unique username of user
+     * @return Object of Users model class
+     */
     public Users findAppUserByUserName(String userName) {
         try {
             String sql = "select e from " + Users.class.getName() + " e "
@@ -56,6 +86,13 @@ public class AppUserDAO {
         }
     }
 
+    /**
+     * <p>Find user by email address.
+     * </p>
+     *
+     * @param email unique email address of user
+     * @return Object of Users model class
+     */
     public Users findByEmail(String email) {
         try {
             String sql = "select e from " + Users.class.getName() + " e "
@@ -68,6 +105,15 @@ public class AppUserDAO {
         }
     }
 
+    /**
+     * <p>Checks whether username is already present
+     * or not.This method helps in user registration
+     * process to show availability of username.
+     * </p>
+     *
+     * @param userName_prefix username which a new user fill during registration
+     * @return String username either available one or already present
+     */
     private String findAvailableUserName(String userName_prefix) {
         Users account = this.findAppUserByUserName(userName_prefix);
         if (account == null) {
@@ -83,7 +129,14 @@ public class AppUserDAO {
         }
     }
 
-    // Auto create App User Account.
+    /**
+     * <p>Auto create App User Account. When user logged in with
+     * 3rd party OAuth provider like google ,facebook etc
+     * </p>
+     *
+     * @param connection object of connection interface
+     * @return Object of Users model class
+     */
     public Users createAppUser(Connection<?> connection) throws NoSuchAlgorithmException {
         ConnectionKey key = connection.getKey();
         System.out.println("key= (" + key.getProviderId() + "," + key.getProviderUserId() + ")");
@@ -106,8 +159,7 @@ public class AppUserDAO {
         users.setPassword(encrytedPassword);
         users.setUsername(userName);
         users.setEmail(email);
-        users.setFirstName(userProfile.getFirstName());
-        users.setLastName(userProfile.getLastName());
+        users.setName(userProfile.getFirstName());
         this.entityManager.persist(users);
         // Create default Role
         List<String> roleNames = new ArrayList<String>();
@@ -117,12 +169,20 @@ public class AppUserDAO {
         return users;
     }
 
+    /**
+     * <p>Creates a new account of the user when user registers
+     * account with user registration form.
+     * </p>
+     *
+     * @param appUserForm user registration form with data
+     * @param roleNames list of roles a user have
+     * @return Object of Users model class
+     */
     public Users registerNewUserAccount(AppUserForm appUserForm, List<String> roleNames) {
         Users users = new Users();
         users.setUsername(appUserForm.getUserName());
         users.setEmail(appUserForm.getEmail());
-        users.setFirstName(appUserForm.getFirstName());
-        users.setLastName(appUserForm.getLastName());
+        users.setName(appUserForm.getName());
         users.setEnabled(true);
         String encrytedPassword = passwordEncoder().encode(appUserForm.getPassword());
         users.setPassword(encrytedPassword);
@@ -134,6 +194,13 @@ public class AppUserDAO {
         return users;
     }
 
+    /**
+     * <p>Return an instance of custom password encoder
+     * to encode user password before storing in database.
+     * </p>
+     *
+     * @return A new instance of CustomPasswordEncoder
+     */
     private PasswordEncoder passwordEncoder() {
         return new CustomPasswordEncoder();
     }

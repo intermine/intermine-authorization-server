@@ -14,10 +14,15 @@ This is an InterMine Authorization Server built with Spring Boot 2.x OAuth2 whic
 
 ### Features
 
-* OAuth2.0 Authorization Server
-* Postgresql Database
-* Jdbc Token Store
-* Jpa
+* OAuth2.0 Configured Server
+* User login & registration
+* Client registration
+* User dashboard
+* Admin dashboard
+* Migration Supported
+* Cross domain SSO Supported
+* Easy configurations
+* More Secure
 
 ## Getting Started
 
@@ -28,7 +33,6 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them:
 
 * [Postgresql](https://www.postgresql.org/download/linux/ubuntu/) - Database
-* [Postman](https://www.getpostman.com/downloads/) - Rest Client (OPTIONAL)
 * IDE- OPTIONAL
 
 ## Installing
@@ -76,127 +80,130 @@ iii. Run jar file using java
 java -jar target/authserver-0.0.1-SNAPSHOT.jar
 ```
 
-Server will be up on default port 8282 but you can change it by make changes in application.yml file.   
+### STEP-3 Admin credential/Account
+
+Below queries will create an Admin account with following credentials:
+```
+INSERT INTO role(id, name) VALUES (1, 'ROLE_ADMIN');
+```
+```
+INSERT INTO users(user_id, name, username, password, email, enabled, accountnonexpired, credentialsnonexpired, accountnonlocked) VALUES (2, 'Admin','admin','73f841d7321aa6ae28a8d8989d100416', 'admin@intermine.org', true, false, false, false);
+```
+```
+INSERT INTO role_user(row_id, id, user_id) VALUES (2, 1, 2);
+```
+
+| Admin Username  | Admin Password  |
+|-----------------|-----------------|
+|      admin      |    Admin@123    |
 
 
 ## Testing the App
 
+### A. Intermine Authorization Server
+
 1. Create a New account on IM auth server
 
-Open http://localhost:8282/intermine/login in any web browser. You will be redirected to a login screen page and thus create a new account.
+Open http://localhost:8282/intermine in any web browser. You will be redirected to home page of authorization server from where you can choose profile from the menu bar. Once you open your profile you will be redirected to login screen page and can create a new account on this IM auth server.
 
 <p align="center">
-  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/login.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/login_screen.png" alt="Intermine Login" width="500">
 </p>
 
-2.  Register a new client
+2. User Dashboard
 
-
-Only those user can register a client on Intermine auth server which are having account on it. Open http://localhost:8282/intermine in any web browser and you will be redirected to Intermine auth server dashboard from which you can register a new client after login.
+Once you logged in successfully then will be redirected to your dashboard from where you can manage all your client and your profile. You can register a new client or can also manage your already registered clients. From dashboard you can also change your account password.
 
 <p align="center">
-  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/client_registration.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/user_dashboard.png" alt="Intermine Login" width="500">
 </p>
 
-Response
+3. Register a new client
 
-You will get your client id and secret. Make sure to store these somewhere.
+Only those user can register a client on InterMine auth server which are having account on it. Click on the register client bar from your dashboard and fill up the client registration form with some basic required information
 
 <p align="center">
-  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/client_credentials.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/client_registration.png" alt="Intermine Login" width="250" height="400">
 </p>
 
+You will get your client id and secret once InterMine admin verify it.
 
-3. Testing the authorization_code grant type:
+4. Admin Dashboard
 
-For this grant type we need a client and a resource but this is our auth server only so we can test this grant type by using any rest client like postman.
+You can login from same login page with the admin account credentials and on successful login you will be redirected to admin dashboard.
+Here are some features of admin dashboard:
 
-Choose Authorization as OAuth2.0 in your rest client and request a new access token with the following parameters.
+* Can manage all the user accounts
+* Can manage all the registered clients
+* Can verify the clients
 
-```
-Token Name: <your token name>
-Grant Type: Authorization Code
-Callback Url: <your registered URL>
-Auth Url: http://localhost:8282/intermine/oauth/authorize
-Access Token Url: http://localhost:8282/intermine/oauth/token
-Client Id: <your-client-id>
-Client Secret: <your-client-secret>
-Scope: openid profile email
-State:(optional)
-Client Authentication: Send client credentials in body
-```
-
-Response
-
-You will be redirected to a login screen page so make sure to enter correct credentials of admin.
+Verify any registered client with a simple click on verify button
 
 <p align="center">
-  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/login.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/admin_verify.png" alt="Intermine Login" width="500">
 </p>
 
+5. Client Management
 
-After that you will be redirected to approve the scope that client want to access.
+User can manage registered client and access their credentials too from dashboard and is also able to update & delete the clients.
 
 <p align="center">
-  <img src="https://github.com/ry007/intermine-authentication-server/blob/dev/src/main/resources/static/approval.png" alt="Intermine Login" width="500">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/client_management.png" alt="Intermine Login" width="250" height="400">
+</p>
+
+### B. Configuring IM Auth Server On client/Mine
+
+1. Client credentials:
+
+Once you get your client credentials i.e client id and secret then add following lines in your mine property file.
+For example we can add these in biotestmine.properties file:
+
+```
+oauth2.providers = IM
+```
+```
+oauth2.IM.client-id = 6870ca9d7e8545e606e26d51fc5b810b53952eaf.apps.intermine.com
+```
+```
+oauth2.IM.client-secret = 3fb6de6cef8a94c52b4e33e06802e56ce3ebc809
+```
+
+That's all!!! Deploy your mine and then anyone can login in your mine with IM auth server.
+
+2. You can choose IM from the dropdown to login with IM account
+
+<p align="center">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/login_with_mine.png" alt="Intermine Login" width="500">
+</p>
+
+3. Migration
+
+Once you logged in first time on any mine with the IM account, will be redirected to a merge pop up where you will be asked to merge your previous account of mine if have any otherwise can go with No.
+
+<p align="center">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/merge_popup.png" alt="Intermine Login" width="500">
 </p>
 
 
+i. If you don't have any previous account you can go with NO. Once you taps on No then you will be asked to give access of your name and email to the client/mine.
+If you allow it then you will be successfully logged in to the mine otherwise deny will not logged you in to mine
 
-Finally you will get your token!!!!
-
-```
-{
-    "access_token": "eyJhbGciOiJS......gZpfbflmoTw",
-    "token_type": "bearer",
-    "refresh_token": "eyJhbGciOiJSUzI1N....BOUe5_w",
-    "expires_in": 3509,
-    "scope": "openid profile email"
-}
-```
+<p align="center">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/authorize_popup.png" alt="Intermine Login" width="500">
+</p>
 
 
-4. Testing validation of access token:
-In real application only resource server can validate this token but for here we can test by following request:
-Make a Get request with following paramters
-```
-url: http://localhost:8282/intermine/oauth/check_token?token=<your access token>
+ii. If you want to merge your pervious mine account with this new IM account then tap on YES and you will be redirected to merge form page of mine.
 
-```
-Response :
-```
+<p align="center">
+  <img src="https://github.com/rahul-y/intermine-authorization-server/blob/integration/src/main/resources/static/merge_form.png" alt="Intermine Login" width="500">
+</p>
 
-{
-    "active": true,
-    "exp": 1562738689,
-    "user_name": "<your username>",
-    "authorities": [
-        "ROLE_USER"
-    ],
-    "client_id": "393c9bc0b8037080c934b4b9d524cf4e.apps.intermine.com",
-    "scope": [
-        "openid",
-        "profile",
-        "email"
-    ]
-}
-```
-5. Testing user-info endpoint :
+Enter your old mine account credentials and click on the merge account. Once you click on it then you will redirected back to IM auth server page where you will be asked to give access of your name and email to the mine. If you allow it then you will be successfully logged in to the mine otherwise deny will not logged you in to mine
 
-Make a get request on http://localhost:8282/intermine/user-info with Bearer access token as Authorization header
+4. Cross Domain SSO
 
-
-
-Response:
-
-```
-
-{
-    "name": "firstname",
-    "email":"user@intermine.com",
-    "sub":"user_id"
-}
-```
+Once you logged in to any mine by IM account in your browser then you will be automatically logged in to all of the mine. If you already authorized other mines to access your name and email i.e have already an account on other mine then you will be automatically logged in to that mine if you open it in another tab.
 
 ## Running the tests
 

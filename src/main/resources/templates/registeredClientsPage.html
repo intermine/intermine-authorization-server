@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Intermine </title>
     <meta charset="utf-8">
@@ -7,12 +7,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link href="custom.css" rel="stylesheet">
+    <link th:href="@{/custom.css}" rel="stylesheet">
 </head>
 <body>
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
-        <img height="80" src="intermine.png" width="700">
+        <img height="80" th:src="@{/intermine.png}" width="700">
     </div>
 </div>
 </div>
@@ -21,8 +21,8 @@
         <div class="nav-wrapper" >
             <ul class="left hide-on-med-and-down" id="nav-mobile">
                 <li><a href="/intermine">Home</a></li>
-                <li><a href="/intermine/userInfo">User Info</a></li>
-                <li><a href="/intermine/clientRegistration">Register Client</a></li>
+                <li><a href="/intermine/user/userInfo">User Info</a></li>
+                <li><a href="/intermine/client/clientRegistration">Register Client</a></li>
                 <li><a href="/intermine/logout">Logout</a></li>
             </ul>
         </div>
@@ -41,58 +41,47 @@
                     <div class="collapsible-body"><span>
                         <div class="col-sm-3">
                         <div class="row">
-
-<form  th:object="${updateClient}" th:action="@{/updateClient}" method="POST">
-
+<form  th:object="${updateClient}" th:action="@{/client/updateClient}" method="POST">
 
      <div class="row">
-        <div class="input-field col s6">
+        <div class="col s6">
             <input id="ClientName" type="hidden" class="validate" th:value="${client.clientName}" th:name="ClientName">
-            <input disabled value="I am not editable" id="websiteUrl" type="text" class="validate" th:value="${client.websiteUrl}" >
-          <label for="websiteUrl">Website Url</label>
+          <label>Website Url: <input value="I am not editable" id="websiteUrl" type="text" class="validate" th:value="${client.websiteUrl}" readonly></label>
         </div>
       </div>
-
         <div class="row">
-        <div class="input-field col s6">
-            <input disabled value="I am not editable" id="Client_type" type="text" class="validate" th:value="${client.clientType}">
-          <label for="Client_type">Client Type</label>
+        <div class="col s6">
+           <label>Client Type: <input value="I am not editable" id="Client_type" type="text" class="validate" th:value="${client.clientType}" readonly></label>
         </div>
       </div>
 
       <div class="row">
-        <div class="input-field col s12">
-            <input disabled value="I am not editable" id="clientId" type="text" class="validate" th:value="${client.clientId}" >
-          <label for="clientId">Client Id</label>
+        <div class="col s12">
+            <label>Client Id: <input value="I am not editable" id="clientId" type="text" class="validate" th:value="${client.clientId}" readonly></label>
         </div>
       </div>
         <div class="row">
-        <div class="input-field col s12">
-            <input disabled value="I am not editable" id="Client_secret" type="text" class="validate" th:value="${client.clientSecret}">
-          <label for="Client_secret">Client Secret</label>
+        <div class="col s12">
+            <label>Client Secret: <input value="I am not editable" id="Client_secret" type="text" class="validate" th:value="${secretMap.get(client)}" readonly></label>
         </div>
       </div>
-
-
 
         <div class="row">
-        <div class="input-field col s12">
-
-        <input class="validate" id="registeredRedirectUri" th:value="${client.registeredRedirectUri}"  type="text" th:name="registeredRedirectUri">
-                  <label for="registeredRedirectUri">Redirect Uri</label>
-
-
+        <div class="col s12">
+       <label >Redirect Uri: <input class="validate" id="registeredRedirectUri" th:value="${client.registeredRedirectUri}"  type="text" th:name="registeredRedirectUri"></label>
         </div>
       </div>
-    <button type="submit" value="Submit">Submit</button>
-  <button type="reset" value="Reset">Reset</button>
+
+    <button type="submit" value="Submit" name="update" class="btn btn-success">Update</button>
+  <button type="reset" value="Reset" class="btn btn-warning">Reset</button>
+  <button type="submit" value="Submit" name="delete" class="btn btn-danger">Delete</button>
     </form>
   </div>
-
-                        </div>
-                    </span></div>
-                </li>
-            </ul>
+</div>
+</span>
+</div>
+</li>
+</ul>
 
 
         </div>
@@ -103,6 +92,15 @@
     nav {
         background-color: #17a2b8;
     }
+     .btn-success{
+        background: #5cb85c;;
+        }
+        .btn-danger{
+        background: #d9534f;
+        }
+        .btn-warning{
+        background: #f0ad4e;
+        }
 </style>
 <script>
     $(document).ready(function () {

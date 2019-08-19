@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet"  th:href="@{/css/contactPage.css}">
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!--
+<small>Enter message (optional) and click button "Send"</small>
+<div class="wrapper centered">
+  <article class="letter">
+    <div class="side">
+      <h1>Contact us</h1>
+      <p>
+        <textarea placeholder="Your message"></textarea>
+      </p>
+    </div>
+    <div class="side">
+      <p>
+        <input type="text" placeholder="Your name" required>
+      </p>
+      <p>
+        <input type="email" placeholder="Your email" required>
+      </p>
+      <p>
+        <button id="sendLetter">Send</button>
+      </p>
+    </div>
+  </article>
+  <div class="envelope front"></div>
+  <div class="envelope back"></div>
+</div>
+<p class="result-message centered">Thank you for your message</p>
+<br>
+<br>
+<br>
+-->
+ <h3><span style="font-size: 50px; color: white">Contact Us</span></h3>
+<button type="button" class="btn btn-success" onclick="window.location ='https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&source=mailto&to=info@intermine.org';">info@intermine.org</button>
+<button type="button" class="btn btn-success" onclick="window.location ='https://lists.intermine.org/pipermail/dev/';">Developer email list</button>
+<button type="button" class="btn btn-success" onclick="window.location ='https://discordapp.com/invite/rrJDS6N';">Chat</button>
+<button type="button" class="btn btn-success" onclick="window.location ='https://github.com/intermine/intermine';">Github</button>
+<button type="button" class="btn btn-success" onclick="window.location ='https://twitter.com/intermineorg';">@intermineorg</button>
+<button type="button" class="btn btn-success" onclick="window.location ='https://intermineorg.wordpress.com/';">Blog</button>
+
+<a href="/intermine"> <p class="result-message centered">  <button>Home</button> </p> </a>
+
+<!-- partial -->
+ <script type="text/javascript" src="/static/js/contactPage.js" th:src="@{/js/contactPage.js}"></script>
+
+</body>
+</html>

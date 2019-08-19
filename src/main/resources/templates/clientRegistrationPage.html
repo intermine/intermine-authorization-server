@@ -20,12 +20,12 @@
         })
     </script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="custom.css">
+    <link rel="stylesheet" th:href="@{/custom.css}">
 </head>
 <body>
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
-        <img src="intermine.png" width="700" height="80" >
+        <img th:src="@{/intermine.png}" width="700" height="80" >
     </div>
 </div>
 <div class="container">
@@ -39,7 +39,7 @@
             <form th:object="${myForm}" method="POST">
                 <div class="form-group">
                     <label for="clientName">Client Name:</label>
-                    <input type="text" class="form-control" id="clientName" autofocus th:field="*{clientName}"><br/>
+                    <input type="text" class="form-control" id="clientName" autofocus th:field="*{clientName}" required><br/>
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('clientName')}" th:errors="*{clientName}">
                     </div>
                 </div>
@@ -57,7 +57,7 @@
 
                 <div class="form-group">
                     <label for="websiteUrl">Website Url:</label>
-                    <input type="text" class="form-control" id="websiteUrl" th:field="*{websiteUrl}"><br/>
+                    <input type="text" class="form-control" id="websiteUrl" th:field="*{websiteUrl}" required><br/>
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('websiteUrl')}" th:errors="*{websiteUrl}">
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                     <span class="fa fa-plus add"></span>
                     <div class="appending_div">
                         <div>
-                            <input type="text" class="form-control" name="registeredRedirectUri" id="registeredRedirectUri" th:field="*{registeredRedirectUri}">
+                            <input type="text" class="form-control" name="registeredRedirectUri" id="registeredRedirectUri" th:field="*{registeredRedirectUri}" required>
 
                         </div>
                     </div>

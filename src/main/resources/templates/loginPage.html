@@ -22,9 +22,10 @@
     <div class="row">
         <div class="col-sm-1">
         </div>
-        <div class="col-sm-3">
+<!--
+        <div class="col-sm-3" >
             <div style="padding-top:12px;">
-                <a class="btn btn-block btn-social btn-google customBtn" th:href="@{/auth/google}">
+                <a   class="btn btn-block btn-social btn-google customBtn" th:href="@{/auth/google}">
                     <span class="fa fa-google width42px"></span> Sign in with Google
                 </a>
             </div>
@@ -33,20 +34,22 @@
         <div class="col-sm-1">
             <hr>
         </div>
-        <div class="col-sm-5">
+        -->
+        <div class="col-sm-7" >
             <div style="padding-top:15px;">
                 <!-- /login?error=true -->
-                <div class="alert alert-danger" th:if="${#request.getParameter('error') == 'true'}">
-                    Invalid Username/Password
-                </div>
-                <form th:action="@{/j_spring_security_check}" method='POST'>
+
+                <form th:action="@{/j_spring_security_check}" method='POST' style="padding-left: 275px;">
+                    <div class="alert alert-danger" th:if="${#request.getParameter('error') == 'true'}">
+                          Invalid Username/Password
+                    </div>
                     <div class="form-group">
                         <label for="usernameTxt">Username:</label>
                         <input type="text" class="form-control" id="usernameTxt" autofocus name="username">
                     </div>
                     <div class="form-group">
-                        <label for="pwd">Password:</label>
-                        <input type="password" class="form-control" id="pwd" name="password"><br>
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" id="password" name="password"><br>
                         <input type="checkbox" onclick="myFunction()">  Show Password
                     </div>
                     <div class="d-flex justify-content-between mb-3">
@@ -64,7 +67,7 @@
 </body>
 <script>
     function myFunction() {
-        var x = document.getElementById("pwd");
+        var x = document.getElementById("password");
         if (x.type === "password") {
             x.type = "text";
         } else {

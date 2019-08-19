@@ -1,7 +1,7 @@
 create table if not exists  oauth_client_details (
   id SERIAL PRIMARY KEY,
-  client_id varchar(255) not null UNIQUE,
-  client_secret varchar(255) not null UNIQUE ,
+  client_id varchar(255) UNIQUE,
+  client_secret varchar(255) UNIQUE ,
   client_name VARCHAR(255) not null UNIQUE ,
   client_website_url VARCHAR(255) not null UNIQUE ,
   web_server_redirect_uri varchar(2048) default null,
@@ -28,15 +28,14 @@ create table if not exists role (
 ) ;
 create table if not exists  users (
   user_id serial primary key,
+  name varchar(255) not NULL,
   username varchar(100) not null unique,
   password varchar(1024) not null,
   email varchar(1024) not null,
   enabled BOOLEAN not null,
   accountNonExpired BOOLEAN not null,
   credentialsNonExpired BOOLEAN not null,
-  accountNonLocked BOOLEAN not null,
-  first_name varchar(150) not NULL ,
-  last_name varchar(150)
+  accountNonLocked BOOLEAN not null
 ) ;
 create table  if not exists permission_role (
   permission_id  int default null REFERENCES permission(id),
@@ -58,6 +57,7 @@ create table if not exists oauth_client_token (
 
 
 create table if not exists oauth_access_token (
+  id serial,
   token_id VARCHAR(256),
   token BYTEA,
   authentication_id VARCHAR(256) PRIMARY KEY,

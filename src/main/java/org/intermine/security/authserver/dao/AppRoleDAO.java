@@ -14,27 +14,32 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data access object class having access to database and
+ * contains logic to access data from role_user table.
+ *
+ * @author Rahul Yadav
+ *
+ */
 @Repository
 @Transactional
 public class AppRoleDAO {
 
+    /**
+     * Used to read, delete and write an entity.
+     * An object referenced by an entity is managed
+     * by entity manager.
+     */
     @Autowired
     private EntityManager entityManager;
 
-    @SuppressWarnings("unchecked")
-    public List<String> getRoleNames(Integer userId) {
-        //TODO Implement this function to return all the roles
-        /*
-        String sql = "Select role.name from role_user,role where user_id = :userId";
-        Query query = this.entityManager.createQuery(sql, String.class);
-        query.setParameter("userId", userId);
-        return query.getResultList();
-        */
-        ArrayList<String> list = new ArrayList<String>();
-        list.add("ROLE_USER");
-        return list;
-    }
-
+    /**
+     * <p>Used to get Role by roleName.
+     * </p>
+     *
+     * @param roleName name of role to fetch
+     * @return Object of Role model
+     */
     public Role findAppRoleByName(String roleName) {
         try {
             String sql = "Select e from " + Role.class.getName() + " e "
@@ -48,6 +53,13 @@ public class AppRoleDAO {
         }
     }
 
+    /**
+     * <p>Set roles of a user.
+     * </p>
+     *
+     * @param roleNames list of roles which a user have
+     * @param users instance of Users model class
+     */
     public void createRoleFor(Users users, List<String> roleNames) {
         //
         for (String roleName : roleNames) {

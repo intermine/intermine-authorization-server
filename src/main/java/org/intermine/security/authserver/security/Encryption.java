@@ -14,17 +14,33 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Encryption class contains methods to encrypt and decrypt
+ * data using some special algorithms and static keys.
+ * These methods are used to encode user password, used to
+ * generate client credentials.
+ *
+ * @author Rahul Yadav
+ *
+ */
 public class Encryption {
+
+    /**
+     * A static key used to encrypt plain text.
+     */
     private static String KEY = "430P2U55YZ289Q35";
 
-    /*An initialization vector (IV) an arbitrary number used along with a secret key for data encryption.*/
-
-    private static String IV = "3qpow9o0xaapfdjl";
     /**
-     * Password Encryption.
+     * An initialization vector (IV) an arbitrary number used along with a secret key for data encryption.
+     */
+    private static String IV = "3qpow9o0xaapfdjl";
+
+    /**
+     * <p>Encrypt the String using AES algorithm.
+     * </p>
      *
-     * @param plain data password.
-     * @return Hex encoded encrypted password
+     * @param plain data string.
+     * @return Hex encoded encrypted string
      * @throws InvalidKeyException                Invalid key.
      * @throws InvalidAlgorithmParameterException Invalid Algorithm.
      * @throws NoSuchAlgorithmException           Didn't find Algorithm.
@@ -32,7 +48,6 @@ public class Encryption {
      * @throws IllegalBlockSizeException          Block padding Error.
      * @throws BadPaddingException                Padding Error.
      */
-
     public static String EncryptAESCBCPCKS5Padding(String plain)
             throws InvalidKeyException, InvalidAlgorithmParameterException, NoSuchAlgorithmException,
             NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
@@ -51,10 +66,12 @@ public class Encryption {
         byte[] encrypted = cipher.doFinal(plain.getBytes());
         return hexEncode(encrypted);
     }
+
     /**
-     * Decrypt password.
+     * <p>Decrypt the String which is encoded by AES algorithm
+     * </p>
      *
-     * @param encryptText data password .
+     * @param encryptText data string .
      * @return Original String
      * @throws InvalidKeyException                Invalid key.
      * @throws InvalidAlgorithmParameterException Invalid Algorithm.
@@ -63,7 +80,6 @@ public class Encryption {
      * @throws IllegalBlockSizeException          Block padding Error.
      * @throws BadPaddingException                Padding Error
      */
-
     public static String DecryptAESCBCPCKS5Padding(String encryptText)
             throws InvalidKeyException, InvalidAlgorithmParameterException, NoSuchAlgorithmException,
             NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
@@ -81,6 +97,14 @@ public class Encryption {
 
         return new String(original);
     }
+
+    /**
+     * <p> Hex decodes a encrypted String.
+     * </p>
+     *
+     * @param input String to decode
+     * @return byte array
+     */
     private static byte[] hexDecode(String input) {
 
         try {
@@ -92,8 +116,9 @@ public class Encryption {
     }
 
     /**
-     * Hex encodes a byte array.
-     * Returns an empty string if the input array is null or empty.
+     * <p>Hex encodes a byte array. Returns an empty
+     * string if the input array is null or empty.
+     * </p>
      *
      * @param input bytes to encode
      * @return string containing hex representation of input byte array
@@ -119,6 +144,13 @@ public class Encryption {
         return output.toString();
     }
 
+    /**
+     * <p>Encrypt the byte array data using SHA algorithm.
+     * </p>
+     *
+     * @param plain byte array of plain text
+     * @return String encrypted data
+     */
     public static String SHA1(byte[] plain) throws NoSuchAlgorithmException {
 
         String enc;

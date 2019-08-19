@@ -11,13 +11,34 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * Data access object class having access to database and
+ * contains logic to access data from userconnection
+ * table.
+ *
+ * @author Rahul Yadav
+ *
+ */
 @Repository
 @Transactional
 public class UserConnectionDAO {
 
+    /**
+     * Used to read, delete and write an entity.
+     * An object referenced by an entity is managed
+     * by entity manager.
+     */
     @Autowired
     private EntityManager entityManager;
 
+    /**
+     * <p>Used to get user details from userconnection table
+     * using unique provider id.
+     * </p>
+     *
+     * @param userProviderId provider i
+     * @return Object of UserConnection model class
+     */
     public UserConnection findUserConnectionByUserProviderId(String userProviderId) {
         try {
             String sql = "Select e from " + UserConnection.class.getName() + " e " //
